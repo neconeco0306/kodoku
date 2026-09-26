@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kodoku-evolution"
+version = "0.1.0"
+description = "A small evolutionary search framework for ideas and hypotheses."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "neconeco0306" }]
+keywords = ["evolutionary-search", "ideas", "agents", "llm", "optimization"]
+
+[project.scripts]
+kodoku-demo = "kodoku.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
