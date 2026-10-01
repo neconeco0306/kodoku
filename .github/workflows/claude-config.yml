@@ -32,3 +32,17 @@ jobs:
             grep -q '^name:' "$f"
             grep -q '^description:' "$f"
           done
+      - name: Enforce permanent context budget
+        run: |
+          set -eu
+          bytes=$(wc -c < CLAUDE.md)
+          lines=$(wc -l < CLAUDE.md)
+          [ "$bytes" -le 6000 ] || { echo "CLAUDE.md too large: $bytes bytes (budget 6000)"; exit 1; }
+          [ "$lines" -le 80 ] || { echo "CLAUDE.md too long: $lines lines (budget 80)"; exit 1; }
+          skills=$(find .claude/skills -mindepth 1 -maxdepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+          [ "$skills" -le 30 ] || { echo "too many project skills: $skills (budget 30)"; exit 1; }
+          for hook in .claude/hooks/*.sh; do
+            [ -f "$hook" ] || continue
+            size=$(wc -c < "$hook")
+            [ "$size" -le 5000 ] || { echo "hook too large: $hook ($size bytes)"; exit 1; }
+          done
