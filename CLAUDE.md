@@ -1,13 +1,13 @@
 # Claude Code operating rules
 
-- Conserve Claude usage: prefer targeted reads/searches over broad repository scans and reuse facts already established in the session.
-- The SessionStart hook injects a compact project snapshot. Use it instead of rediscovering branch, HEAD, working-tree state, and recent commits.
-- When resuming work, use the `resume-project` skill and inspect only files directly required by the current task or failing checks.
-- When repeated work appears, use `skill-factory` to move it to the cheapest reliable layer: script first, then hook, then Skill.
-- Prefer deterministic commands and existing tests over model narration.
-- For ordinary local source edits, run `.claude/scripts/check-changed.sh` before choosing broader tests; it checks only changed/untracked JS, Python, JSON, and shell files.
-- Start with the smallest viable implementation and targeted checks. Expand only when evidence requires it.
-- After two failed attempts with the same approach, change strategy instead of repeating similar exploration.
-- Do not proactively refactor or inspect unrelated code while completing a bounded task.
-
+- Use the SessionStart snapshot instead of rediscovering branch, HEAD, working-tree state, or recent commits.
+- Use `resume-project` for continuation. Inspect only files directly required by the task, changed-file list, failing checks, or a concrete dependency.
+- Prefer targeted reads/searches and reuse facts already established in the session. Do not reopen unchanged files without a reason.
+- After ordinary local source edits, run `.claude/scripts/check-changed.sh` before choosing broader tests.
 - For material completion or cross-cutting changes, run `.claude/scripts/verify-project.sh`; do not rediscover the full-test command each session.
+- When repeated work appears, use `skill-factory` and prefer script → hook → Skill over more permanent instructions.
+- On usage/session/rate limits, use `quota-guard`; do not retry, start duplicate sessions, or rerun already-successful work.
+- At a real session/model boundary, use `handoff-report`; keep continuation state compact.
+- Start with the smallest viable implementation. After two failed attempts with the same approach, change strategy.
+- Do not proactively refactor or inspect unrelated code while completing a bounded task.
+- Prefer deterministic evidence and tests over model narration.
