@@ -31,8 +31,7 @@ fi
 
 for task_file in TASK.md TASKS.md TODO.md ROADMAP.md; do
   if [ -f "$task_file" ]; then
-    printf '%s\n' "task file: $task_file"
-    sed -n '1,40p' "$task_file"
+    printf '%s\n' "task file available: $task_file (read only if needed)"
     break
   fi
 done
