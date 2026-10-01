@@ -9,3 +9,5 @@
 - Start with the smallest viable implementation and targeted checks. Expand only when evidence requires it.
 - After two failed attempts with the same approach, change strategy instead of repeating similar exploration.
 - Do not proactively refactor or inspect unrelated code while completing a bounded task.
+
+- For material completion or cross-cutting changes, run `.claude/scripts/verify-project.sh`; do not rediscover the full-test command each session.
