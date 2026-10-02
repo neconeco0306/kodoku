@@ -76,9 +76,22 @@ button,input{font:inherit}
 .extract.e1{left:31%;top:31%;color:var(--green)}.extract.e2{left:58%;top:64%;color:var(--cyan)}.extract.e3{left:43%;top:45%;color:var(--amber)}
 .refline{position:absolute;height:1px;transform-origin:0 50%;opacity:.22;background:linear-gradient(90deg,currentColor,transparent);pointer-events:none}
 .refline.l1{left:34%;top:34%;width:28%;color:var(--green);transform:rotate(19deg)}.refline.l2{left:48%;top:49%;width:25%;color:var(--cyan);transform:rotate(-31deg)}
-.nodecard{position:absolute;right:10px;bottom:10px;width:245px;background:rgba(7,9,11,.88);border:1px solid #293138;box-shadow:0 14px 40px rgba(0,0,0,.36);padding:8px 9px;pointer-events:none}
+.nodecard{position:absolute;right:10px;bottom:10px;width:262px;background:rgba(7,9,11,.92);border:1px solid #293138;box-shadow:0 14px 40px rgba(0,0,0,.36);padding:8px 9px;pointer-events:none}
 .nodecard .ey{color:#64717a;font-size:7px;letter-spacing:.12em}.nodecard h3{margin:4px 0 3px;font-size:12px}.nodecard p{margin:0;color:#78848c;font-size:8px;line-height:1.5}
 .nodegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px}.nodegrid div{border-top:1px solid #20272b;padding-top:4px}.nodegrid span{display:block;color:#566168;font-size:6px}.nodegrid b{display:block;color:#d7dee1;margin-top:2px;font-size:10px;font-weight:500}
+.analysis-strip{position:absolute;left:10px;right:284px;bottom:10px;height:42px;border-top:1px solid #1d262b;background:linear-gradient(180deg,rgba(6,9,10,.18),rgba(6,9,10,.72));display:grid;grid-template-columns:1.15fr .9fr 1fr;gap:1px;pointer-events:none}
+.analysis-strip>div{padding:6px 8px;border-right:1px solid #1a2125}.analysis-strip>div:last-child{border-right:0}
+.analysis-strip small{display:block;color:#4f5d64;font-size:6px;letter-spacing:.11em}.analysis-strip b{display:block;margin-top:3px;font-size:8px;font-weight:500;color:#aeb8bd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.analysis-strip .good{color:var(--green)}.analysis-strip .cyan{color:var(--cyan)}.analysis-strip .amber{color:var(--amber)}
+.corpus{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.paper{position:absolute;width:260px;padding:7px 8px;background:linear-gradient(180deg,rgba(7,9,10,.82),rgba(5,7,8,.47));border-left:1px solid #27343a;color:#616d73;font-size:7px;line-height:1.55;box-shadow:0 10px 28px rgba(0,0,0,.18)}
+.paper strong{color:#8f9ba2;font-weight:500}.paper mark{background:rgba(120,255,176,.08);color:var(--green);padding:0 2px}.paper .cite{color:#506d78}.paper.p1{left:4%;top:22%;transform:rotate(-.8deg)}.paper.p2{right:4%;top:24%;width:285px;transform:rotate(.7deg)}.paper.p3{left:22%;top:57%;width:310px;transform:rotate(.2deg)}
+.anchor{position:absolute;width:118px;height:54px;border:1px solid currentColor;color:#829099;background:rgba(5,8,9,.58);box-shadow:0 0 24px rgba(0,0,0,.32);pointer-events:none}
+.anchor:before,.anchor:after{content:"";position:absolute;width:10px;height:10px}.anchor:before{left:-1px;top:-1px;border-left:2px solid currentColor;border-top:2px solid currentColor}.anchor:after{right:-1px;bottom:-1px;border-right:2px solid currentColor;border-bottom:2px solid currentColor}
+.anchor span{display:block;padding:6px 7px 0;font-size:6px;letter-spacing:.1em;color:#64717a}.anchor b{display:block;padding:3px 7px;font-size:10px;font-weight:600;color:#d8e0e4}.anchor em{position:absolute;right:6px;top:6px;font-style:normal;font-size:7px}
+.anchor.a1{left:33%;top:24%;color:var(--cyan)}.anchor.a2{left:57%;top:44%;color:var(--green)}.anchor.a3{left:39%;top:67%;color:var(--amber)}.anchor.a4{left:68%;top:16%;color:var(--violet)}
+.analysis-marker{position:absolute;width:7px;height:7px;border:1px solid currentColor;transform:rotate(45deg);box-shadow:0 0 8px currentColor;opacity:.72}
+.analysis-marker.m1{left:28%;top:41%;color:var(--cyan)}.analysis-marker.m2{left:52%;top:31%;color:var(--green)}.analysis-marker.m3{left:64%;top:60%;color:var(--amber)}.analysis-marker.m4{left:46%;top:52%;color:var(--violet)}
 .middle{display:grid;grid-template-columns:1.05fr .95fr 1fr;min-height:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .middle .panel{border-bottom:0;border-right:1px solid var(--line)}.middle .panel:last-child{border-right:0}
 .chartbox{height:calc(100% - 28px);padding:7px 8px;display:flex;flex-direction:column;gap:5px}
@@ -175,31 +188,49 @@ button,input{font:inherit}
       <section class="mainviz">
         <canvas id="graph"></canvas>
         <div class="scan"></div>
-        <div class="viztitle"><small>LIVE CROSS-DOMAIN MAP // 3D PROJECTION</small><h1>RESEARCH FIELD / SIGNAL TOPOLOGY</h1></div>
+        <div class="viztitle"><small>LIVE SEMANTIC TRACE // CRAWLER + EVIDENCE</small><h1>RESEARCH ANALYSIS SURFACE / HYP-241</h1></div>
         <div class="vizmeta">
-          <div class="badge">NODES <b id="nodeCount">184</b></div>
-          <div class="badge">EDGES <b id="edgeCount">326</b></div>
+          <div class="badge">SOURCES <b id="nodeCount">193</b></div>
+          <div class="badge">EXTRACTS <b id="edgeCount">326</b></div>
           <div class="badge">BRIDGES <b id="bridgeCount">18</b></div>
-          <div class="badge">NOVELTY <b class="ok">0.81</b></div>
+          <div class="badge">CONF. <b class="ok">0.81</b></div>
         </div>
-        <div class="legend"><span style="color:var(--cyan)">AI SAFETY</span><span style="color:var(--green)">BIOLOGY</span><span style="color:var(--amber)">ECON</span><span style="color:var(--violet)">ROBOTICS</span><span style="color:var(--blue)">MATH</span></div>
+
+        <div class="corpus" aria-hidden="true">
+          <article class="paper p1"><strong>[SOURCE 091] arXiv:2609.04127</strong><br>... autonomous systems should preserve <mark>meaningful dissent</mark> during evaluator convergence ... <span class="cite">§4.2 / p.17</span><br>critic independence remains a necessary but insufficient condition ...</article>
+          <article class="paper p2"><strong>[SOURCE 144] doi:10.1038/evo.1842</strong><br>... selection environments preserve variation when fitness signals are partially decoupled ... <mark>adaptive oversight</mark> may be modeled as maintained evaluator diversity ...</article>
+          <article class="paper p3"><strong>[CRITIC 07] contradiction packet</strong><br>Claim: stronger selection pressure improves convergence. Counter: excessive pressure induces lineage collapse and deceptive local optima. <mark>micro-test required</mark> before promotion.</article>
+          <div class="anchor a1"><span>EXTRACT / SAFETY</span><b>DISSENT</b><em>.94</em></div>
+          <div class="anchor a2"><span>EXTRACT / BIOLOGY</span><b>SELECTION</b><em>.88</em></div>
+          <div class="anchor a3"><span>CRITIC / CONFLICT</span><b>COLLAPSE RISK</b><em>.71</em></div>
+          <div class="anchor a4"><span>LINEAGE / HOF</span><b>OVERSIGHT</b><em>.83</em></div>
+          <i class="analysis-marker m1"></i><i class="analysis-marker m2"></i><i class="analysis-marker m3"></i><i class="analysis-marker m4"></i>
+        </div>
+
         <div class="refs" aria-hidden="true">
           <span class="ref c r1">arXiv:2609.04127 / EVAL</span>
           <span class="ref g r2">DOI:10.1038/evo.1842</span>
           <span class="ref a r3">SRC:PRIMARY / 0.94</span>
           <span class="ref v r4">CRITIC:INDEPENDENT</span>
-          <span class="ref c r5">BRIDGE:SAFETY→BIO / .86</span>
+          <span class="ref c r5">BRIDGE:DISSENT→SELECTION / .86</span>
           <span class="ref g r6">LINEAGE:HYP-241→HOF</span>
           <b class="extract e1">adaptive oversight</b>
           <b class="extract e2">selection pressure</b>
           <b class="extract e3">meaningful dissent</b>
           <i class="refline l1"></i><i class="refline l2"></i>
         </div>
+
+        <div class="analysis-strip">
+          <div><small>ACTIVE CLAIM</small><b class="cyan">maintain evaluator diversity under selection</b></div>
+          <div><small>CRITIC STATE</small><b class="amber">1 unresolved contradiction</b></div>
+          <div><small>NEXT ACTION</small><b class="good">micro-test / reversible / 12m budget</b></div>
+        </div>
+
         <aside class="nodecard" id="nodecard">
-          <div class="ey">SELECTED / CONSTELLATION</div>
-          <h3 id="selName">HALL OF FAME CORE</h3>
-          <p id="selDesc">検証を生き残った原理・発見・血統が集まる中心核。</p>
-          <div class="nodegrid"><div><span>ACTIVE</span><b id="n1">128</b></div><div><span>HYP</span><b id="n2">34</b></div><div><span>EXP</span><b id="n3">12</b></div><div><span>HOF</span><b id="n4">9</b></div></div>
+          <div class="ey">ACTIVE HYPOTHESIS / HYP-241</div>
+          <h3 id="selName">ADAPTIVE OVERSIGHT</h3>
+          <p id="selDesc">Safetyの「独立した批判」と進化系の「多様性維持」を同一の選択圧モデルとして検証中。</p>
+          <div class="nodegrid"><div><span>EVIDENCE</span><b id="n1">94</b></div><div><span>DISSENT</span><b id="n2">2</b></div><div><span>REPL.</span><b id="n3">3</b></div><div><span>SURVIVE</span><b id="n4">83</b></div></div>
         </aside>
       </section>
 
@@ -349,47 +380,80 @@ button,input{font:inherit}
 (function(){
 "use strict";
 var c=document.getElementById("graph"),x=c.getContext("2d"),D=Math.min(devicePixelRatio||1,1.5),W=0,H=0;
-var S={yaw:.18,pitch:-.10,zoom:760,tzoom:760,drag:false,x:0,y:0,auto:true,selected:"core",collisionUntil:0};
-var cols={core:"#ffd37e",safety:"#63e6ff",bio:"#78ffb0",econ:"#ffc66d",robot:"#b38cff",math:"#6fa3ff",lang:"#ff83c6",systems:"#89a8ff"};
-var defs=[
-{id:"safety",name:"AI SAFETY",c:cols.safety,p:[-235,-110,20],n:27,desc:"alignment / evaluation / autonomous safety"},
-{id:"bio",name:"BIOLOGY",c:cols.bio,p:[235,-120,-30],n:25,desc:"evolution / ecology / adaptation"},
-{id:"econ",name:"ECONOMICS",c:cols.econ,p:[-280,80,-70],n:20,desc:"markets / incentives / institutional pressure"},
-{id:"robot",name:"ROBOTICS",c:cols.robot,p:[285,90,65],n:22,desc:"control / embodiment / environment"},
-{id:"math",name:"MATH",c:cols.math,p:[-135,220,60],n:24,desc:"formalization / optimization / proof"},
-{id:"lang",name:"LANGUAGE",c:cols.lang,p:[155,215,-55],n:21,desc:"meaning / symbols / representation"},
-{id:"systems",name:"SYSTEMS",c:cols.systems,p:[0,-250,115],n:18,desc:"agents / evaluators / closed loops"}
+var S={drag:false,x:0,y:0,panX:0,panY:0,targetX:0,targetY:0,collisionUntil:0};
+var cols={cyan:"#63e6ff",green:"#78ffb0",amber:"#ffc66d",red:"#ff6b73",violet:"#b38cff",blue:"#6fa3ff"};
+var traces=[
+  {a:[.18,.38],b:[.40,.31],c:cols.cyan,w:.24,phase:.10},
+  {a:[.40,.31],b:[.61,.49],c:cols.green,w:.30,phase:.42},
+  {a:[.61,.49],b:[.48,.71],c:cols.amber,w:.22,phase:.68},
+  {a:[.40,.31],b:[.70,.22],c:cols.violet,w:.18,phase:.25},
+  {a:[.27,.62],b:[.61,.49],c:cols.cyan,w:.16,phase:.54},
+  {a:[.48,.71],b:[.70,.22],c:cols.green,w:.13,phase:.84},
+  {a:[.24,.45],b:[.52,.33],c:cols.blue,w:.12,phase:.33}
 ];
-var nodes=[],edges=[],clusters={core:{id:"core",name:"HALL OF FAME CORE",c:cols.core,p:[0,0,0],desc:"検証を生き残った原理・発見・血統が集まる中心核。"}};
-function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-defs.forEach(function(d,di){clusters[d.id]=d;var r=rng(100+di*31),base=nodes.length;nodes.push({g:d.id,p:d.p,c:d.c,s:6.5,head:true});for(var i=0;i<d.n;i++){var a=r()*Math.PI*2,b=(r()-.5)*1.4,q=28+Math.pow(r(),.72)*72,p=[d.p[0]+Math.cos(a)*Math.cos(b)*q,d.p[1]+Math.sin(b)*q*.72,d.p[2]+Math.sin(a)*Math.cos(b)*q];nodes.push({g:d.id,p:p,c:d.c,s:1.4+r()*1.9});var j=base+Math.floor(r()*(i+1));edges.push([nodes.length-1,Math.max(base,j),d.c,.15]);if(r()>.56&&i>3)edges.push([nodes.length-1,base+1+Math.floor(r()*i),d.c,.08])}});
-nodes.push({g:"core",p:[0,0,0],c:cols.core,s:11,head:true});var coreIndex=nodes.length-1;
-defs.forEach(function(d){var i=nodes.findIndex(function(n){return n.g===d.id&&n.head});edges.push([coreIndex,i,d.c,.22])});
-[["safety","bio"],["bio","robot"],["math","safety"],["systems","econ"],["lang","systems"],["robot","math"],["lang","bio"],["econ","safety"]].forEach(function(q){var a=nodes.findIndex(function(n){return n.g===q[0]&&n.head}),b=nodes.findIndex(function(n){return n.g===q[1]&&n.head});edges.push([a,b,"#8fa9bd",.11])});
-var stars=[],R=rng(44);for(var i=0;i<300;i++)stars.push({p:[(R()-.5)*1300,(R()-.5)*850,(R()-.5)*1100],s:.3+R()*1.2,a:.1+R()*.28});
+var scraps=[
+  {x:.11,y:.19,t:"[091] evaluator independence / failure cases / appendix C",a:.28},
+  {x:.52,y:.13,t:"candidate bridge detected → safety/evolution",a:.34},
+  {x:.10,y:.73,t:"counterexample cluster: premature convergence / 17 traces",a:.24},
+  {x:.69,y:.69,t:"HOF ancestry / evidence-based escalation / rev.4",a:.26},
+  {x:.34,y:.49,t:"semantic overlap = 0.63 / lexical overlap = 0.18",a:.30},
+  {x:.62,y:.35,t:"critic packet #07 / unresolved = 1",a:.31}
+];
 function resize(){W=c.clientWidth;H=c.clientHeight;c.width=Math.round(W*D);c.height=Math.round(H*D);x.setTransform(D,0,0,D,0,0)}addEventListener("resize",resize);resize();
-function rot(p){var cy=Math.cos(S.yaw),sy=Math.sin(S.yaw),cp=Math.cos(S.pitch),sp=Math.sin(S.pitch),xx=cy*p[0]-sy*p[2],zz=sy*p[0]+cy*p[2],yy=cp*p[1]-sp*zz;zz=sp*p[1]+cp*zz;return[xx,yy,zz]}
-function proj(p){var q=rot(p),z=S.zoom+q[2],sc=680/Math.max(150,z+620);return{x:W*.5+q[0]*sc,y:H*.52+q[1]*sc,z:q[2],s:sc}}
-function hex(h,a){var v=h.replace("#",""),n=parseInt(v,16),r=n>>16,g=n>>8&255,b=n&255;return"rgba("+r+","+g+","+b+","+a+")"}
-function bg(){x.fillStyle="#040607";x.fillRect(0,0,W,H);var g=x.createRadialGradient(W*.5,H*.48,0,W*.5,H*.48,Math.max(W,H)*.68);g.addColorStop(0,"rgba(18,33,41,.30)");g.addColorStop(.42,"rgba(4,9,12,.12)");g.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=g;x.fillRect(0,0,W,H)}
+function bg(t){
+  x.fillStyle="#040607";x.fillRect(0,0,W,H);
+  var g=x.createRadialGradient(W*.49,H*.43,0,W*.49,H*.43,Math.max(W,H)*.65);
+  g.addColorStop(0,"rgba(23,39,43,.24)");g.addColorStop(.42,"rgba(6,10,12,.08)");g.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=g;x.fillRect(0,0,W,H);
+  x.save();x.strokeStyle="rgba(120,150,160,.035)";x.lineWidth=.5;
+  for(var i=0;i<12;i++){var y=(i/11)*H;x.beginPath();x.moveTo(0,y);x.lineTo(W,y);x.stroke()}
+  for(i=0;i<16;i++){var xx=(i/15)*W;x.beginPath();x.moveTo(xx,0);x.lineTo(xx,H);x.stroke()}
+  x.restore();
+}
+function path(a,b,color,alpha,t,phase){
+  var ax=a[0]*W+S.panX,ay=a[1]*H+S.panY,bx=b[0]*W+S.panX,by=b[1]*H+S.panY;
+  var mx=(ax+bx)/2,my=(ay+by)/2-26*Math.sin((a[0]+b[1])*7);
+  x.strokeStyle=color;x.globalAlpha=alpha;x.lineWidth=.65;x.beginPath();x.moveTo(ax,ay);x.quadraticCurveTo(mx,my,bx,by);x.stroke();
+  var q=((t*.00008)+phase)%1,u=1-q,px=u*u*ax+2*u*q*mx+q*q*bx,py=u*u*ay+2*u*q*my+q*q*by;
+  x.globalAlpha=.8;x.fillStyle=color;x.fillRect(px-1.2,py-1.2,2.4,2.4);
+  x.globalAlpha=.18;for(var k=1;k<5;k++){var qq=Math.max(0,q-k*.035),uu=1-qq,tx=uu*uu*ax+2*uu*qq*mx+qq*qq*bx,ty=uu*uu*ay+2*uu*qq*my+qq*qq*by;x.fillRect(tx-1,ty-1,2,2)}
+}
+function cross(px,py,color,size){
+  x.save();x.translate(px,py);x.strokeStyle=color;x.globalAlpha=.55;x.lineWidth=.7;
+  x.beginPath();x.moveTo(-size,0);x.lineTo(-4,0);x.moveTo(4,0);x.lineTo(size,0);x.moveTo(0,-size);x.lineTo(0,-4);x.moveTo(0,4);x.lineTo(0,size);x.stroke();
+  x.strokeRect(-3,-3,6,6);x.restore();
+}
 function draw(t){
- requestAnimationFrame(draw);S.zoom+=(S.tzoom-S.zoom)*.075;if(S.auto&&!S.drag)S.yaw+=.0006;bg();
- x.save();x.globalCompositeOperation="lighter";
- stars.forEach(function(s){var p=proj(s.p);x.globalAlpha=s.a*Math.max(.35,p.s);x.fillStyle="#9fb7c6";x.fillRect(p.x,p.y,s.s*p.s,s.s*p.s)});
- edges.forEach(function(e,idx){var a=proj(nodes[e[0]].p),b=proj(nodes[e[1]].p),boost=t<S.collisionUntil&&idx%5===0?2.6:1;x.strokeStyle=hex(e[2],e[3]*boost);x.lineWidth=.45;x.beginPath();x.moveTo(a.x,a.y);var mx=(a.x+b.x)/2,my=(a.y+b.y)/2-12*Math.sin(idx*.8);x.quadraticCurveTo(mx,my,b.x,b.y);x.stroke()});
- var order=nodes.map(function(n,i){return{n:n,i:i,p:proj(n.p)}}).sort(function(a,b){return a.p.z-b.p.z});
- order.forEach(function(o){var n=o.n,p=o.p,sel=S.selected===n.g,rr=n.s*p.s*(sel?1.3:1),gr=x.createRadialGradient(p.x,p.y,0,p.x,p.y,rr*4.6);gr.addColorStop(0,hex(n.c,.9));gr.addColorStop(.2,hex(n.c,.5));gr.addColorStop(1,hex(n.c,0));x.fillStyle=gr;x.beginPath();x.arc(p.x,p.y,rr*4.6,0,Math.PI*2);x.fill();x.fillStyle=n.c;x.globalAlpha=n.head?1:.78;x.beginPath();x.arc(p.x,p.y,Math.max(1,rr),0,Math.PI*2);x.fill();if(n.head){x.strokeStyle=hex(n.c,.35);x.globalAlpha=.7;x.beginPath();x.arc(p.x,p.y,rr*2.8+Math.sin(t*.003+o.i)*1.5,0,Math.PI*2);x.stroke()}n.hit={x:p.x,y:p.y,r:Math.max(9,rr*3)}});
- x.restore();
- x.save();x.font="600 9px "+getComputedStyle(document.body).fontFamily;x.textAlign="center";x.textBaseline="middle";Object.keys(clusters).forEach(function(id){var d=clusters[id],p=proj(d.p);if(p.x<0||p.x>W||p.y<0||p.y>H)return;x.fillStyle=id==="core"?"#f5dfb7":"#aab5ba";x.globalAlpha=.8;x.fillText(d.name,p.x,p.y+(id==="core"?24:-17))});x.restore();
- if(t<S.collisionUntil){var a=proj(clusters.safety.p),b=proj(clusters.bio.p),q=1-(S.collisionUntil-t)/2200;q=Math.max(0,Math.min(1,q));for(var k=0;k<18;k++){var tt=(q+k/18*.45)%1,xx=a.x+(b.x-a.x)*tt,yy=a.y+(b.y-a.y)*tt-35*Math.sin(tt*Math.PI);x.fillStyle=k%2?cols.safety:cols.bio;x.globalAlpha=.8;x.beginPath();x.arc(xx,yy,1.5+(k%4===0?2:0),0,Math.PI*2);x.fill()}}
+  requestAnimationFrame(draw);S.panX+=(S.targetX-S.panX)*.06;S.panY+=(S.targetY-S.panY)*.06;bg(t);
+  x.save();x.globalCompositeOperation="lighter";
+  traces.forEach(function(tr,i){path(tr.a,tr.b,tr.c,tr.w*(t<S.collisionUntil&&i<4?2.5:1),t,tr.phase)});
+  cross(.40*W+S.panX,.31*H+S.panY,cols.cyan,12);
+  cross(.61*W+S.panX,.49*H+S.panY,cols.green,12);
+  cross(.48*W+S.panX,.71*H+S.panY,cols.amber,11);
+  cross(.70*W+S.panX,.22*H+S.panY,cols.violet,10);
+  x.restore();
+
+  x.save();x.font="8px "+getComputedStyle(document.body).fontFamily;
+  scraps.forEach(function(s,i){x.globalAlpha=s.a+.05*Math.sin(t*.001+i);x.fillStyle=i%3===0?"#74858c":"#5d6a70";x.fillText(s.t,s.x*W+S.panX,s.y*H+S.panY)});
+  x.restore();
+
+  // extraction brackets and crawled text lanes
+  x.save();x.strokeStyle="rgba(99,230,255,.18)";x.lineWidth=.6;
+  for(var j=0;j<5;j++){var yy=H*(.16+j*.14),off=Math.sin(t*.0007+j)*10;x.beginPath();x.moveTo(W*.06+off,yy);x.lineTo(W*.17+off,yy);x.stroke()}
+  x.restore();
+
+  if(t<S.collisionUntil){
+    var q=1-(S.collisionUntil-t)/2200;q=Math.max(0,Math.min(1,q));
+    var a=[.40*W,.31*H],b=[.61*W,.49*H],mx=(a[0]+b[0])/2,my=(a[1]+b[1])/2-42;
+    x.save();x.globalCompositeOperation="lighter";
+    for(var n=0;n<26;n++){var tt=(q+n/26*.48)%1,u=1-tt,px=u*u*a[0]+2*u*tt*mx+tt*tt*b[0],py=u*u*a[1]+2*u*tt*my+tt*tt*b[1];x.fillStyle=n%2?cols.cyan:cols.green;x.globalAlpha=.75;x.fillRect(px,py,n%5===0?3:1.5,n%5===0?3:1.5)}
+    x.restore();
+  }
 }
 requestAnimationFrame(draw);
-function pick(mx,my){var best=null,bd=999;nodes.forEach(function(n){if(!n.head||!n.hit)return;var d=Math.hypot(mx-n.hit.x,my-n.hit.y);if(d<n.hit.r&&d<bd){bd=d;best=n.g}});if(best)select(best)}
-function select(id){S.selected=id;var d=clusters[id]||clusters.core;document.getElementById("selName").textContent=d.name;document.getElementById("selDesc").textContent=d.desc;var seed=id==="core"?9:id.split("").reduce(function(a,c){return a+c.charCodeAt(0)},0);document.getElementById("n1").textContent=72+(seed*7)%81;document.getElementById("n2").textContent=9+(seed*5)%32;document.getElementById("n3").textContent=3+(seed*3)%15;document.getElementById("n4").textContent=id==="core"?9:1+seed%7}
-c.addEventListener("pointerdown",function(e){S.drag=true;S.auto=false;S.x=e.clientX;S.y=e.clientY;c.setPointerCapture(e.pointerId)});
-c.addEventListener("pointermove",function(e){if(!S.drag)return;var dx=e.clientX-S.x,dy=e.clientY-S.y;S.yaw+=dx*.005;S.pitch+=dy*.003;S.pitch=Math.max(-.85,Math.min(.85,S.pitch));S.x=e.clientX;S.y=e.clientY});
-c.addEventListener("pointerup",function(e){var moved=Math.hypot(e.clientX-S.x,e.clientY-S.y);S.drag=false;S.auto=true;if(moved<8){var r=c.getBoundingClientRect();pick(e.clientX-r.left,e.clientY-r.top)}});
-c.addEventListener("wheel",function(e){e.preventDefault();S.tzoom+=e.deltaY*.35;S.tzoom=Math.max(440,Math.min(1200,S.tzoom))},{passive:false});
+c.addEventListener("pointerdown",function(e){S.drag=true;S.x=e.clientX;S.y=e.clientY;c.setPointerCapture(e.pointerId)});
+c.addEventListener("pointermove",function(e){if(!S.drag)return;var dx=e.clientX-S.x,dy=e.clientY-S.y;S.targetX=Math.max(-55,Math.min(55,S.targetX+dx*.18));S.targetY=Math.max(-35,Math.min(35,S.targetY+dy*.18));S.x=e.clientX;S.y=e.clientY});
+c.addEventListener("pointerup",function(){S.drag=false});
+c.addEventListener("dblclick",function(){S.targetX=0;S.targetY=0});
 
 function lineChart(id,color){
  var el=document.getElementById(id),cx=el.getContext("2d"),vals=Array.from({length:56},function(_,i){return .48+Math.sin(i*.42)*.13+Math.sin(i*.13)*.10+Math.random()*.06});function rs(){var w=el.clientWidth,h=el.clientHeight,dd=Math.min(devicePixelRatio||1,1.5);el.width=w*dd;el.height=h*dd;cx.setTransform(dd,0,0,dd,0,0);cx.clearRect(0,0,w,h);cx.strokeStyle="#182024";cx.lineWidth=1;for(var k=1;k<4;k++){cx.beginPath();cx.moveTo(0,h*k/4);cx.lineTo(w,h*k/4);cx.stroke()}cx.strokeStyle=color;cx.lineWidth=1.3;cx.beginPath();vals.forEach(function(v,i){var px=i/(vals.length-1)*w,py=h-(v*.74+.08)*h;if(i===0)cx.moveTo(px,py);else cx.lineTo(px,py)});cx.stroke()}addEventListener("resize",rs);rs();setInterval(function(){vals.shift();vals.push(Math.max(.08,Math.min(.94,vals[vals.length-1]+(Math.random()-.5)*.14)));rs()},900)}
@@ -397,7 +461,7 @@ lineChart("chartA",cols.cyan);
 
 var flash=document.getElementById("flash"),cli=document.getElementById("cliout");
 function addCli(text,cls){var d=document.createElement("div");d.innerHTML='<span class="sys">['+new Date().toLocaleTimeString("en-GB")+']</span> <span class="'+(cls||"")+'">'+text+"</span>";cli.appendChild(d);while(cli.children.length>6)cli.removeChild(cli.firstChild);cli.scrollTop=cli.scrollHeight}
-document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim();addCli("&gt; "+v,"cmd");addCli("dispatching specialist collision / evidence gate / novelty critic ...","warn");S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");setTimeout(function(){addCli("3 candidate bridges generated → 1 micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19},2200)});
+document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim();addCli("&gt; "+v,"cmd");addCli("dispatching specialist collision / evidence gate / novelty critic ...","warn");S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");document.getElementById("selName").textContent="DISSENT × SELECTION";document.getElementById("selDesc").textContent="独立した批判を、進化的な多様性維持として再解釈。過剰な選択圧によるlineage collapseを反証側で監視。";setTimeout(function(){addCli("3 candidate bridges generated → 1 reversible micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19;document.getElementById("n1").textContent=96;document.getElementById("n2").textContent=3;document.getElementById("n3").textContent=4;document.getElementById("n4").textContent=86},2200)});
 function clock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-GB")}clock();setInterval(clock,1000);
 var frame=0,last=performance.now();function fps(t){frame++;if(t-last>1000){document.getElementById("fps").textContent=Math.round(frame*1000/(t-last))+" FPS";frame=0;last=t}requestAnimationFrame(fps)}requestAnimationFrame(fps);
 setInterval(function(){document.getElementById("cycle").textContent="#"+(1842+Math.floor((Date.now()/9000)%19));document.getElementById("throughput").textContent=(122+Math.floor(Math.random()*15))+"/h";document.getElementById("rejectRate").textContent=(70+Math.random()*4).toFixed(1)+"%";document.querySelectorAll(".ref").forEach(function(el,i){el.style.opacity=(.48+Math.random()*.42).toFixed(2);if(i===4)el.textContent="BRIDGE:SAFETY→BIO / "+(.81+Math.random()*.08).toFixed(2)})},2800);
