@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#02040a">
+<title>POLYMATH OBSERVATORY</title>
+<meta name="description" content="POLYMATH / KODOKU interactive 3D research universe.">
+<style>
+:root{color-scheme:dark;--ink:#f5f8ff;--muted:#7f90b1;--hair:rgba(139,183,255,.16);--cyan:#65e4ff;--violet:#9e7cff;--gold:#ffd28b}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02040a;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","Noto Sans JP",sans-serif}
+button,input{font:inherit}#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}#gl:active{cursor:grabbing}
+body:before{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;background:
+radial-gradient(ellipse at 50% 46%,transparent 22%,rgba(3,5,15,.08) 50%,rgba(0,0,0,.68) 100%),
+linear-gradient(180deg,rgba(4,10,25,.18),transparent 28%,transparent 70%,rgba(0,0,0,.42))}
+body:after{content:"";position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.13;mix-blend-mode:soft-light;background-image:repeating-radial-gradient(circle at 20% 20%,rgba(255,255,255,.16) 0 .3px,transparent .45px 3px);background-size:5px 5px}
+.ui{position:fixed;inset:0;z-index:6;pointer-events:none}.glass{background:linear-gradient(135deg,rgba(10,18,39,.64),rgba(5,9,22,.34));border:1px solid var(--hair);box-shadow:inset 0 1px rgba(255,255,255,.045),0 24px 72px rgba(0,0,0,.28);backdrop-filter:blur(20px) saturate(130%);-webkit-backdrop-filter:blur(20px) saturate(130%)}
+.brand{position:absolute;left:24px;top:22px}.brand p,.ey{margin:0;font-size:8px;letter-spacing:.24em;color:#8292b6;font-weight:700;text-transform:uppercase}.brand h1{margin:6px 0 0;font-size:17px;font-weight:550;letter-spacing:.32em}
+.live{position:absolute;right:24px;top:24px;display:flex;align-items:center;gap:8px;font-size:7px;letter-spacing:.18em;color:#91a3c5}.led{width:6px;height:6px;border-radius:50%;background:#74ffd4;box-shadow:0 0 16px #61ffd0;animation:pulse 1.7s ease-in-out infinite}@keyframes pulse{50%{opacity:.45;transform:scale(.8)}}
+.hero{position:absolute;left:24px;top:95px;width:230px}.hero .index{display:flex;align-items:center;gap:8px;font-size:7px;letter-spacing:.2em;color:#6f81a3}.rule{width:30px;height:1px;background:linear-gradient(90deg,#65e4ff,transparent)}.hero h2{font-size:27px;line-height:.95;font-weight:410;letter-spacing:-.04em;margin:10px 0 9px}.hero p{font-size:9px;line-height:1.65;color:#7585a5;margin:0;max-width:205px}
+.labels{position:fixed;inset:0;pointer-events:none}.label{position:absolute;transform:translate(-50%,-50%);padding:5px 8px;border:1px solid rgba(158,194,255,.12);border-radius:999px;background:rgba(4,8,19,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap;color:#dbe8ff;font-size:7px;letter-spacing:.08em;box-shadow:0 7px 22px rgba(0,0,0,.2);transition:opacity .16s}.label:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--c,#65e4ff);box-shadow:0 0 9px var(--c,#65e4ff);margin-right:6px;vertical-align:0}.label.core{font-size:8px;color:#fff2d7;border-color:rgba(255,210,139,.2);padding:6px 10px}
+.panel{position:absolute;right:22px;top:92px;width:300px;border-radius:18px;padding:15px;pointer-events:auto;transition:.4s cubic-bezier(.2,.8,.2,1)}.panel .head{display:flex;justify-content:space-between;gap:10px}.panel h3{margin:5px 0 0;font-size:20px;font-weight:520;letter-spacing:-.02em}.chip{height:max-content;border:1px solid rgba(105,226,255,.24);border-radius:999px;padding:5px 7px;background:rgba(80,172,255,.07);color:#9edfff;font-size:6px;letter-spacing:.18em}.desc{font-size:9px;line-height:1.65;color:#8999b7;margin:11px 0 12px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.metrics div{padding:7px 6px;border:1px solid rgba(157,191,255,.09);border-radius:10px;background:rgba(255,255,255,.015)}.metrics span{display:block;font-size:5px;letter-spacing:.14em;color:#65779a}.metrics strong{display:block;margin-top:4px;font-size:14px;font-weight:460}.trace{margin-top:8px;height:38px;border-top:1px solid rgba(255,255,255,.05)}.trace svg{width:100%;height:42px;filter:drop-shadow(0 0 5px rgba(101,228,255,.55))}
+.close{display:none}
+.nav{position:absolute;left:22px;bottom:22px;display:flex;gap:2px;padding:5px;border-radius:16px;pointer-events:auto}.nav button{border:0;background:transparent;color:#68799b;min-width:78px;height:46px;border-radius:11px;cursor:pointer;transition:.2s}.nav b{display:block;font-size:12px;font-weight:400;margin-bottom:3px}.nav small{display:block;font-size:5px;letter-spacing:.16em}.nav button.on,.nav button:hover{color:#f4f9ff;background:linear-gradient(135deg,rgba(55,146,255,.16),rgba(128,80,255,.08));box-shadow:inset 0 0 0 1px rgba(107,210,255,.12)}
+.command{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:min(540px,calc(100vw - 760px));min-width:340px;height:56px;border-radius:17px;padding:6px;display:grid;grid-template-columns:1fr 45px;gap:5px;pointer-events:auto}.command input{border:0;outline:0;background:transparent;color:#eaf4ff;padding:0 12px;font-size:10px}.command button{border:1px solid rgba(125,217,255,.28);border-radius:12px;color:#fff;background:radial-gradient(circle at 30% 22%,rgba(125,228,255,.4),transparent 45%),linear-gradient(135deg,#174d8d,#51339d);box-shadow:0 0 22px rgba(62,136,255,.18);font-size:16px;cursor:pointer}.command button:active{transform:scale(.94)}
+.toast{position:absolute;left:50%;bottom:91px;transform:translate(-50%,18px);opacity:0;width:min(450px,calc(100vw - 32px));padding:11px 13px;border-radius:14px;transition:.4s cubic-bezier(.2,.8,.2,1)}.toast.open{opacity:1;transform:translate(-50%,0)}.toast .row{display:flex;justify-content:space-between;gap:10px}.toast strong{font-size:8px;letter-spacing:.12em}.toast em{font-style:normal;font-size:6px;color:#6effd0;letter-spacing:.16em}.toast p{margin:6px 0 0;color:#8190ad;font-size:8px;line-height:1.55}
+.hint{position:absolute;left:50%;top:27px;transform:translateX(-50%);font-size:6px;letter-spacing:.18em;color:#566684;transition:opacity 1s;white-space:nowrap}.corner{position:absolute;width:36px;height:36px;opacity:.3}.tl{left:13px;top:13px;border-left:1px solid #6aaeff;border-top:1px solid #6aaeff}.tr{right:13px;top:13px;border-right:1px solid #6aaeff;border-top:1px solid #6aaeff}
+.loader{position:fixed;z-index:20;inset:0;display:grid;place-items:center;background:#02040a;transition:opacity .45s}.loader.done{opacity:0;pointer-events:none}.mark{position:relative;width:96px;height:96px;border:1px solid rgba(106,177,255,.15);border-radius:50%;display:grid;place-items:center}.mark:before,.mark:after{content:"";position:absolute;border:1px solid rgba(106,196,255,.26);border-radius:50%;inset:12px;animation:spin 1.8s linear infinite}.mark:after{inset:29px;border-color:rgba(158,117,255,.36);animation-direction:reverse;animation-duration:1.2s}.mark span{font-size:6px;letter-spacing:.24em;color:#8497ba}@keyframes spin{to{transform:rotate(360deg)}}
+.fallback{display:none;position:fixed;z-index:30;inset:0;background:#030610;padding:34px 24px;color:#dce8ff}.fallback h2{font-size:26px;font-weight:500}
+@media(max-width:1020px){.command{width:min(440px,47vw);min-width:290px}.nav button{min-width:64px}.panel{width:260px}}
+@media(max-width:760px){
+ .corner{display:none}.brand{left:17px;top:17px}.brand p{font-size:6px}.brand h1{font-size:14px;letter-spacing:.28em}.live{right:17px;top:20px}.hint{top:49px;font-size:5px}
+ .hero{left:17px;top:76px;width:170px}.hero .index{font-size:5px}.hero h2{font-size:20px;margin:7px 0}.hero p{display:none}
+ .label{font-size:6px;padding:4px 6px}.label.core{font-size:7px;padding:5px 8px}
+ .panel{left:14px;right:14px;top:auto;bottom:139px;width:auto;opacity:0;transform:translateY(18px);pointer-events:none;padding:11px 12px;border-radius:15px}.panel.open{opacity:1;transform:none;pointer-events:auto}.panel .head{padding-right:24px}.panel h3{font-size:15px;margin-top:2px}.panel .desc{font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:7px 0}.metrics{gap:4px}.metrics div{padding:6px}.metrics strong{font-size:12px}.trace{display:none}.close{display:grid;place-items:center;position:absolute;right:9px;top:8px;width:25px;height:25px;border:0;border-radius:50%;color:#8190ad;background:rgba(255,255,255,.04)}
+ .nav{left:14px;right:14px;bottom:75px;height:53px;padding:4px;justify-content:space-between}.nav button{min-width:0;flex:1;height:43px;padding:0 2px}.nav b{font-size:10px;margin-bottom:2px}.nav small{font-size:4.5px;letter-spacing:.1em}
+ .command{left:14px;right:14px;bottom:max(13px,env(safe-area-inset-bottom));transform:none;width:auto;min-width:0;height:52px;border-radius:15px}.command input{font-size:9px;padding:0 9px}.command button{border-radius:11px}
+ .toast{bottom:139px}.toast strong{font-size:7px}.toast p{font-size:7px}
+}
+@media(prefers-reduced-motion:reduce){.led,.mark:before,.mark:after{animation:none}}
+</style>
+</head>
+<body>
+<div class="loader" id="loader"><div class="mark"><span>POLYMATH</span></div></div>
+<div class="fallback" id="fallback"><h2>この端末で3Dを開始できませんでした。</h2><p>ページを再読み込みしてください。</p></div>
+<canvas id="gl" aria-label="POLYMATH 3D knowledge universe"></canvas>
+<div class="ui">
+ <i class="corner tl"></i><i class="corner tr"></i>
+ <header class="brand"><p>POLYMATH / RESEARCH UNIVERSE</p><h1>OBSERVATORY</h1></header>
+ <div class="live"><i class="led"></i><span id="status">SYSTEM ONLINE</span></div>
+ <div class="hint" id="hint">DRAG TO ORBIT · PINCH TO DIVE · TAP A CONSTELLATION</div>
+ <section class="hero"><div class="index"><i class="rule"></i><span id="modeIndex">LIVE / 001</span></div><h2 id="modeTitle">Knowledge<br>Universe</h2><p id="modeCopy">専門知・仮説・実験・失敗を、同じ空間で衝突させる。</p></section>
+ <div class="labels" id="labels"></div>
+ <section class="panel glass" id="panel">
+   <button class="close" id="close">×</button>
+   <div class="head"><div><p class="ey">SELECTED CONSTELLATION</p><h3 id="panelTitle">HALL OF FAME</h3></div><span class="chip" id="chip">CORE</span></div>
+   <p class="desc" id="panelDesc">検証を生き残った発見・運用原理・血統が集まる中心核。</p>
+   <div class="metrics"><div><span>ACTIVE</span><strong id="m1">128</strong></div><div><span>HYP.</span><strong id="m2">34</strong></div><div><span>EXP.</span><strong id="m3">12</strong></div><div><span>HOF</span><strong id="m4">9</strong></div></div>
+   <div class="trace"><svg viewBox="0 0 280 46" preserveAspectRatio="none"><path d="M0 38 C22 37 27 15 49 23 S77 41 94 29 121 8 141 18 163 37 180 26 204 12 224 18 246 33 280 7" fill="none" stroke="#65e4ff" stroke-width="1.2"/></svg></div>
+ </section>
+ <nav class="nav glass" id="nav">
+   <button class="on" data-mode="explore"><b>◎</b><small>EXPLORE</small></button>
+   <button data-mode="hypotheses"><b>◇</b><small>HYPOTHESES</small></button>
+   <button data-mode="experiments"><b>△</b><small>EXPERIMENTS</small></button>
+   <button data-mode="evolution"><b>⌁</b><small>KODOKU</small></button>
+   <button data-mode="discoveries"><b>✦</b><small>DISCOVERIES</small></button>
+ </nav>
+ <form class="command glass" id="command"><input id="prompt" value="AI safetyと進化生物学を衝突させて"><button aria-label="run">↗</button></form>
+ <aside class="toast glass" id="toast"><div class="row"><strong id="toastTitle">CROSS-DOMAIN COLLISION</strong><em id="toastState">COMPLETE</em></div><p id="toastText">3件の候補ブリッジを抽出しました。</p></aside>
+</div>
+<script>
+(function(){
+"use strict";
+var canvas=document.getElementById("gl"),gl=canvas.getContext("webgl",{alpha:false,antialias:true,powerPreference:"high-performance",preserveDrawingBuffer:false});
+if(!gl){document.getElementById("loader").style.display="none";document.getElementById("fallback").style.display="block";return}
+var DPR=Math.min(window.devicePixelRatio||1,1.7),W=1,H=1,aspect=1;
+var mobile=matchMedia("(max-width:760px)").matches,reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
+var state={yaw:.18,pitch:-.06,zoom:mobile?1430:1040,targetZoom:mobile?1430:1040,drag:false,lastX:0,lastY:0,auto:!reduce,mode:"explore",selected:"core",collision:null};
+var touches=new Map(),pinch=0;
+var COLORS={core:[1,.73,.34],safety:[.25,.86,1],biology:[.32,1,.74],economics:[1,.62,.24],robotics:[.64,.38,1],math:[.30,.38,1],language:[1,.28,.78],systems:[.50,.64,1]};
+var DEF=[
+{id:"safety",name:"AI Safety",c:COLORS.safety,p:[-300,-145,35],n:31,desc:"整合性・評価・安全な自律性。失敗ケースと反証から更新する。"},
+{id:"biology",name:"Biology",c:COLORS.biology,p:[292,-155,-55],n:27,desc:"進化・生態・適応。生物の探索原理を人工系へ移植する。"},
+{id:"economics",name:"Economics",c:COLORS.economics,p:[-332,104,-92],n:23,desc:"市場・制度・インセンティブ。現実の選択圧をモデル化する。"},
+{id:"robotics",name:"Robotics",c:COLORS.robotics,p:[320,108,78],n:25,desc:"身体性・制御・環境相互作用。現実世界で検証する。"},
+{id:"math",name:"Math",c:COLORS.math,p:[-170,276,72],n:27,desc:"形式化・最適化・証明。曖昧な発見を構造へ落とす。"},
+{id:"language",name:"Language",c:COLORS.language,p:[188,270,-52],n:24,desc:"言語・意味・知識表現。概念間の翻訳と圧縮を担う。"},
+{id:"systems",name:"Systems",c:COLORS.systems,p:[0,-306,116],n:21,desc:"エージェント基盤・評価器・運用ループ。研究所そのものを改善する。"}
+];
+var centers={core:{id:"core",name:"HALL OF FAME",p:[0,0,0],c:COLORS.core,desc:"検証を生き残った発見・運用原理・血統が集まる中心核。"}};
+DEF.forEach(function(d){centers[d.id]=d});
+
+var VS_POINT="attribute vec3 aPos;attribute vec3 aColor;attribute float aSize;uniform float uYaw;uniform float uPitch;uniform float uZoom;uniform float uAspect;uniform float uFov;uniform float uDpr;uniform float uSizeMul;varying vec3 vColor;varying float vDepth;void main(){float cy=cos(uYaw),sy=sin(uYaw),cp=cos(uPitch),sp=sin(uPitch);vec3 p=vec3(cy*aPos.x+sy*aPos.z,aPos.y,-sy*aPos.x+cy*aPos.z);p=vec3(p.x,cp*p.y-sp*p.z,sp*p.y+cp*p.z);float vz=p.z-uZoom;float f=1.0/tan(uFov*.5);gl_Position=vec4(p.x*f/uAspect,p.y*f,-1.0005*vz-2.001,-vz);float z=max(120.0,-vz);gl_PointSize=min(110.0,aSize*uSizeMul*uDpr*(850.0/z));vColor=aColor;vDepth=z;}";
+var FS_POINT="precision mediump float;varying vec3 vColor;uniform float uAlpha;uniform float uGlow;void main(){vec2 q=gl_PointCoord-.5;float r=length(q)*2.0;if(r>1.0)discard;float core=smoothstep(.33,0.0,r);float halo=pow(max(0.0,1.0-r),uGlow);float a=(core*.78+halo*.72)*uAlpha;gl_FragColor=vec4(vColor*a,a);}";
+var VS_LINE="attribute vec3 aPos;attribute vec3 aColor;uniform float uYaw;uniform float uPitch;uniform float uZoom;uniform float uAspect;uniform float uFov;varying vec3 vColor;void main(){float cy=cos(uYaw),sy=sin(uYaw),cp=cos(uPitch),sp=sin(uPitch);vec3 p=vec3(cy*aPos.x+sy*aPos.z,aPos.y,-sy*aPos.x+cy*aPos.z);p=vec3(p.x,cp*p.y-sp*p.z,sp*p.y+cp*p.z);float vz=p.z-uZoom;float f=1.0/tan(uFov*.5);gl_Position=vec4(p.x*f/uAspect,p.y*f,-1.0005*vz-2.001,-vz);vColor=aColor;}";
+var FS_LINE="precision mediump float;varying vec3 vColor;uniform float uAlpha;void main(){gl_FragColor=vec4(vColor*uAlpha,uAlpha);}";
+
+function shader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s}
+function program(vs,fs){var p=gl.createProgram();gl.attachShader(p,shader(gl.VERTEX_SHADER,vs));gl.attachShader(p,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p}
+var PP=program(VS_POINT,FS_POINT),LP=program(VS_LINE,FS_LINE);
+function locs(p,isPoint){return{p:gl.getAttribLocation(p,"aPos"),c:gl.getAttribLocation(p,"aColor"),s:isPoint?gl.getAttribLocation(p,"aSize"):-1,y:gl.getUniformLocation(p,"uYaw"),x:gl.getUniformLocation(p,"uPitch"),z:gl.getUniformLocation(p,"uZoom"),a:gl.getUniformLocation(p,"uAspect"),f:gl.getUniformLocation(p,"uFov"),d:isPoint?gl.getUniformLocation(p,"uDpr"):null,m:isPoint?gl.getUniformLocation(p,"uSizeMul"):null,o:gl.getUniformLocation(p,"uAlpha"),g:isPoint?gl.getUniformLocation(p,"uGlow"):null}}
+var PL=locs(PP,true),LL=locs(LP,false);
+
+function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function pushP(A,C,S,p,c,s){A.push(p[0],p[1],p[2]);C.push(c[0],c[1],c[2]);S.push(s)}
+function pushL(A,C,a,b,c){A.push(a[0],a[1],a[2],b[0],b[1],b[2]);C.push(c[0],c[1],c[2],c[0],c[1],c[2])}
+function makeSet(P,C,S,L,LC){return{p:new Float32Array(P),c:new Float32Array(C),s:new Float32Array(S),l:new Float32Array(L),lc:new Float32Array(LC)}}
+function buildUniverse(){
+ var P=[],C=[],S=[],L=[],LC=[],r0=rng(81);
+ for(var i=0;i<480;i++){var rr=760+r0()*1800,th=r0()*Math.PI*2,ph=Math.acos(2*r0()-1);pushP(P,C,S,[Math.sin(ph)*Math.cos(th)*rr,Math.sin(ph)*Math.sin(th)*rr*.72,Math.cos(ph)*rr],[.25+r0()*.35,.35+r0()*.35,.55+r0()*.35],1+r0()*1.8)}
+ pushP(P,C,S,[0,0,0],COLORS.core,38);
+ for(i=0;i<3;i++){var ring=74+i*18,prev=null;for(var k=0;k<=72;k++){var aa=k/72*Math.PI*2,p=[Math.cos(aa)*ring,Math.sin(aa)*ring*.38,Math.sin(aa+i*.9)*ring*.28];if(prev)pushL(L,LC,prev,p,i===1?COLORS.robotics:COLORS.core);prev=p}}
+ DEF.forEach(function(d,di){var r=rng(1200+di*41),nodes=[];pushP(P,C,S,d.p,d.c,19);for(var j=0;j<d.n;j++){var a=r()*Math.PI*2,b=(r()-.5)*1.45,q=28+Math.pow(r(),.72)*91,p=[d.p[0]+Math.cos(a)*Math.cos(b)*q,d.p[1]+Math.sin(b)*q*.75,d.p[2]+Math.sin(a)*Math.cos(b)*q];nodes.push(p);pushP(P,C,S,p,d.c,j<2?8:3+r()*3);pushL(L,LC,p,j<4?d.p:nodes[Math.floor(r()*nodes.length)],d.c);if(r()>.55&&nodes.length>2)pushL(L,LC,p,nodes[Math.floor(r()*nodes.length)],d.c)}});
+ var links=[["core","safety"],["core","biology"],["core","economics"],["core","robotics"],["core","math"],["core","language"],["core","systems"],["safety","biology"],["biology","robotics"],["math","safety"],["systems","economics"],["language","systems"],["robotics","math"],["language","biology"],["economics","safety"]];
+ links.forEach(function(q,idx){var a=centers[q[0]].p,b=centers[q[1]].p,col=idx<7?centers[q[1]].c:[.55,.7,1],prev=a;for(var j=1;j<=22;j++){var t=j/22,mid=[(a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5+(idx>=7?95:35)],u=1-t,p=[(u*u*a[0]+2*u*t*mid[0]+t*t*b[0]),(u*u*a[1]+2*u*t*mid[1]+t*t*b[1]),(u*u*a[2]+2*u*t*mid[2]+t*t*b[2])];pushL(L,LC,prev,p,col);prev=p}});
+ return makeSet(P,C,S,L,LC)
+}
+function buildEvolution(){
+ var P=[],C=[],S=[],L=[],LC=[],levels=7,rows=[];
+ for(var l=0;l<levels;l++){var count=1+l*2,row=[];for(var i=0;i<count;i++){var p=[(i-(count-1)/2)*58,(l-3)*96,Math.sin(i*2.07+l)*75-70],col=l===levels-1?COLORS.core:COLORS.systems;pushP(P,C,S,p,col,l===levels-1?12:6);row.push(p);if(l){var pr=rows[l-1],pa=pr[Math.min(pr.length-1,Math.floor(i/1.5))];pushL(L,LC,pa,p,[.36,.52,1])}}rows.push(row)}
+ for(var g=0;g<220;g++){var r=rng(600+g),z=-600-r()*900;pushP(P,C,S,[(r()-.5)*1200,(r()-.5)*850,z],[.25,.4,.8],1.2)}
+ return makeSet(P,C,S,L,LC)
+}
+function buildExperiments(){
+ var P=[],C=[],S=[],L=[],LC=[];DEF.slice(0,5).forEach(function(d,idx){var r=68+idx*10,prev=null;for(var k=0;k<=80;k++){var a=k/80*Math.PI*2,p=[d.p[0]+Math.cos(a)*r,d.p[1]+Math.sin(a)*r*.45,d.p[2]+Math.sin(a*2+idx)*35];pushP(P,C,S,p,d.c,k%10===0?5:2);if(prev)pushL(L,LC,prev,p,d.c);prev=p}});return makeSet(P,C,S,L,LC)
+}
+function buildDiscoveries(){
+ var P=[],C=[],S=[],L=[],LC=[];pushP(P,C,S,[0,0,0],COLORS.core,34);for(var i=0;i<9;i++){var a=i/9*Math.PI*2,r=105+(i%3)*32,p=[Math.cos(a)*r,Math.sin(a)*r*.58,Math.sin(a*1.7)*58];pushP(P,C,S,p,COLORS.core,11);pushL(L,LC,[0,0,0],p,COLORS.core)}return makeSet(P,C,S,L,LC)
+}
+var sets={explore:buildUniverse(),hypotheses:null,experiments:buildExperiments(),evolution:buildEvolution(),discoveries:buildDiscoveries()};sets.hypotheses=sets.explore;
+function buffers(set){function b(data){var x=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,x);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);return x}set.pb=b(set.p);set.cb=b(set.c);set.sb=b(set.s);set.lb=b(set.l);set.lcb=b(set.lc);set.pc=set.p.length/3;set.lcCount=set.l.length/3}
+Object.keys(sets).forEach(function(k){if(k!=="hypotheses")buffers(sets[k])});
+sets.hypotheses=sets.explore;
+var dyn={p:new Float32Array(30*3),c:new Float32Array(30*3),s:new Float32Array(30),pb:gl.createBuffer(),cb:gl.createBuffer(),sb:gl.createBuffer(),pc:30};
+for(var di=0;di<30;di++){dyn.c.set(di%2?COLORS.safety:COLORS.biology,di*3);dyn.s[di]=di%6===0?9:5}
+gl.bindBuffer(gl.ARRAY_BUFFER,dyn.cb);gl.bufferData(gl.ARRAY_BUFFER,dyn.c,gl.STATIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,dyn.sb);gl.bufferData(gl.ARRAY_BUFFER,dyn.s,gl.STATIC_DRAW);
+
+function attr(buf,loc,size){gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,size,gl.FLOAT,false,0,0)}
+function common(p,l){gl.uniform1f(l.y,state.yaw);gl.uniform1f(l.x,state.pitch);gl.uniform1f(l.z,state.zoom);gl.uniform1f(l.a,aspect);gl.uniform1f(l.f,mobile?.87:.80)}
+function drawPoints(set,mul,alpha,glow){gl.useProgram(PP);common(PP,PL);gl.uniform1f(PL.d,DPR);gl.uniform1f(PL.m,mul);gl.uniform1f(PL.o,alpha);gl.uniform1f(PL.g,glow);attr(set.pb,PL.p,3);attr(set.cb,PL.c,3);attr(set.sb,PL.s,1);gl.drawArrays(gl.POINTS,0,set.pc)}
+function drawDyn(mul,alpha){gl.useProgram(PP);common(PP,PL);gl.uniform1f(PL.d,DPR);gl.uniform1f(PL.m,mul);gl.uniform1f(PL.o,alpha);gl.uniform1f(PL.g,2.3);attr(dyn.pb,PL.p,3);attr(dyn.cb,PL.c,3);attr(dyn.sb,PL.s,1);gl.drawArrays(gl.POINTS,0,dyn.pc)}
+function drawLines(set,alpha){gl.useProgram(LP);common(LP,LL);gl.uniform1f(LL.o,alpha);attr(set.lb,LL.p,3);attr(set.lcb,LL.c,3);gl.drawArrays(gl.LINES,0,set.lcCount)}
+gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.clearColor(.006,.012,.03,1);
+
+var labels=document.getElementById("labels"),labelEls={};
+function initLabels(){Object.keys(centers).forEach(function(id){var c=centers[id],e=document.createElement("div");e.className="label"+(id==="core"?" core":"");e.textContent=c.name;e.style.setProperty("--c",rgb(c.c));labels.appendChild(e);labelEls[id]=e})}initLabels();
+function rgb(c){return"rgb("+Math.round(c[0]*255)+","+Math.round(c[1]*255)+","+Math.round(c[2]*255)+")"}
+function rotPos(p){var cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch),x=cy*p[0]+sy*p[2],z=-sy*p[0]+cy*p[2],y=cp*p[1]-sp*z;z=sp*p[1]+cp*z;return[x,y,z]}
+function project(p){var q=rotPos(p),vz=q[2]-state.zoom,f=1/Math.tan((mobile?.87:.80)/2);if(vz>=-30)return null;var nx=(q[0]*f/aspect)/(-vz),ny=(q[1]*f)/(-vz);return{x:(nx*.5+.5)*W,y:(-.5*ny+.5)*H,z:-vz,vis:Math.abs(nx)<1.18&&Math.abs(ny)<1.18}}
+function placeLabels(){var show=state.mode==="explore"||state.mode==="hypotheses";Object.keys(labelEls).forEach(function(id){var e=labelEls[id];if(!show){e.style.opacity=0;return}var pr=project(centers[id].p);if(!pr||!pr.vis){e.style.opacity=0;return}e.style.opacity=mobile&&id!=="core"&&pr.z>1550?.45:.9;e.style.left=pr.x+"px";e.style.top=(pr.y+(id==="core"?36:0))+"px";e.style.transform="translate(-50%,-50%) scale("+Math.max(.78,Math.min(1.05,1150/pr.z)) +")"})}
+
+function resize(){W=innerWidth;H=innerHeight;aspect=W/H;DPR=Math.min(devicePixelRatio||1,mobile?1.35:1.7);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);canvas.style.width=W+"px";canvas.style.height=H+"px";gl.viewport(0,0,canvas.width,canvas.height)}addEventListener("resize",resize,{passive:true});resize();
+
+function render(t){
+ requestAnimationFrame(render);state.zoom+=(state.targetZoom-state.zoom)*.09;if(state.auto&&!state.drag)state.yaw+=.00055;
+ gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);var set=sets[state.mode];
+ gl.disable(gl.DEPTH_TEST);drawLines(set,state.mode==="discoveries"?.22:.095);gl.enable(gl.DEPTH_TEST);
+ drawPoints(set,4.4,state.mode==="discoveries"?.25:.12,2.1);drawPoints(set,1.2,.93,3.2);
+ if(state.collision){updateCollision(t);drawDyn(4.8,.18);drawDyn(1.15,.96)}
+ placeLabels()
+}requestAnimationFrame(render);
+
+function bez(a,b,t){var mid=[(a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5+150],u=1-t;return[u*u*a[0]+2*u*t*mid[0]+t*t*b[0],u*u*a[1]+2*u*t*mid[1]+t*t*b[1],u*u*a[2]+2*u*t*mid[2]+t*t*b[2]]}
+function updateCollision(now){var c=state.collision,elapsed=(now-c.start)/2600;if(elapsed>=1){state.collision=null;document.getElementById("status").textContent="SYSTEM ONLINE";state.auto=!reduce;showToast("3 CANDIDATE BRIDGES","COMPLETE","選択圧による監督設計 / 共進化テスト / 適応的価値保持。次は証拠と反証へ。",4800);return}var a=centers.safety.p,b=centers.biology.p;for(var i=0;i<30;i++){var q=(elapsed*.9+i/30*.75)%1,p=bez(a,b,q),w=Math.sin(q*Math.PI)*16;dyn.p[i*3]=p[0]+Math.sin(i*2.1+elapsed*10)*w;dyn.p[i*3+1]=p[1]+Math.cos(i*1.7+elapsed*8)*w*.45;dyn.p[i*3+2]=p[2]+Math.sin(i*.9)*w*.35}gl.bindBuffer(gl.ARRAY_BUFFER,dyn.pb);gl.bufferData(gl.ARRAY_BUFFER,dyn.p,gl.DYNAMIC_DRAW)}
+function collide(){setMode("explore");if(state.collision)return;state.collision={start:performance.now()};state.auto=false;document.getElementById("status").textContent="COLLISION RUNNING";showToast("AI SAFETY × BIOLOGY","SEARCHING","遠い概念の間に新しい橋を探索しています。",2500)}
+
+function select(id,open){var c=centers[id]||centers.core;state.selected=id;document.getElementById("panelTitle").textContent=c.name;document.getElementById("chip").textContent=id==="core"?"CORE":"CONSTELLATION";document.getElementById("panelDesc").textContent=c.desc;var seed=id==="core"?9:id.split("").reduce(function(a,q){return a+q.charCodeAt(0)},0);document.getElementById("m1").textContent=74+(seed*7)%89;document.getElementById("m2").textContent=11+(seed*5)%31;document.getElementById("m3").textContent=4+(seed*3)%15;document.getElementById("m4").textContent=id==="core"?9:1+seed%7;if(open&&mobile)document.getElementById("panel").classList.add("open")}
+select("core",false);
+function pick(x,y){if(!(state.mode==="explore"||state.mode==="hypotheses"))return;var best=null,bd=32;Object.keys(centers).forEach(function(id){var p=project(centers[id].p);if(!p||!p.vis)return;var d=Math.hypot(x-p.x,y-p.y);if(d<bd){bd=d;best=id}});if(best)select(best,true)}
+
+function setMode(m){state.mode=m;document.querySelectorAll("#nav button").forEach(function(b){b.classList.toggle("on",b.dataset.mode===m)});var map={explore:["LIVE / 001","Knowledge<br>Universe","専門知・仮説・実験・失敗を、同じ空間で衝突させる。"],hypotheses:["FRONTIER / 034","Hypothesis<br>Field","異分野の境界に生まれた、まだ確定していない仮説。"],experiments:["ACTIVE / 012","Experiment<br>Orbits","仮説を現実へ落とし、測定・反証・更新する軌道。"],evolution:["KODOKU / 819K","Evolution<br>Lineage","変異・淘汰・血統を追跡し、生き残った構造だけを残す。"],discoveries:["HOF / 009","Verified<br>Discoveries","証拠と反証を通過したものだけを中心へ残す。"]},v=map[m];document.getElementById("modeIndex").textContent=v[0];document.getElementById("modeTitle").innerHTML=v[1];document.getElementById("modeCopy").textContent=v[2];if(m==="evolution"){state.targetZoom=mobile?1260:860;state.yaw=.12;state.pitch=-.05}else if(m==="discoveries"){state.targetZoom=mobile?980:650}else state.targetZoom=mobile?1430:1040;showToast(m==="evolution"?"KODOKU LINEAGE":m.toUpperCase()+" VIEW","ACTIVE",v[2],1300)}
+
+document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-mode]");if(b)setMode(b.dataset.mode)});
+document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();collide()});
+document.getElementById("close").addEventListener("click",function(){document.getElementById("panel").classList.remove("open")});
+
+canvas.addEventListener("pointerdown",function(e){touches.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(touches.size===1){state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;state.auto=false}else if(touches.size===2){var a=Array.from(touches.values());pinch=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)}});
+canvas.addEventListener("pointermove",function(e){if(!touches.has(e.pointerId))return;var old=touches.get(e.pointerId);touches.set(e.pointerId,{x:e.clientX,y:e.clientY});if(touches.size===1&&state.drag){var dx=e.clientX-state.lastX,dy=e.clientY-state.lastY;state.yaw+=dx*.006;state.pitch+=dy*.004;state.pitch=Math.max(-1.05,Math.min(1.05,state.pitch));state.lastX=e.clientX;state.lastY=e.clientY}else if(touches.size===2){var a=Array.from(touches.values()),d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinch){state.targetZoom-= (d-pinch)*2.2;state.targetZoom=Math.max(mobile?620:450,Math.min(mobile?2300:1800,state.targetZoom))}pinch=d}});
+canvas.addEventListener("pointerup",function(e){var start=touches.get(e.pointerId);touches.delete(e.pointerId);if(start&&Math.hypot(e.clientX-start.x,e.clientY-start.y)<7&&touches.size===0)pick(e.clientX,e.clientY);if(touches.size===0){state.drag=false;state.auto=!reduce}else if(touches.size===1){var a=Array.from(touches.values())[0];state.lastX=a.x;state.lastY=a.y}pinch=0});
+canvas.addEventListener("pointercancel",function(e){touches.delete(e.pointerId);if(!touches.size){state.drag=false;state.auto=!reduce}});
+canvas.addEventListener("wheel",function(e){e.preventDefault();state.targetZoom+=e.deltaY*.55;state.targetZoom=Math.max(450,Math.min(1800,state.targetZoom))},{passive:false});
+canvas.addEventListener("dblclick",function(){state.yaw=.18;state.pitch=-.06;state.targetZoom=mobile?1430:1040});
+
+function showToast(title,st,text,ms){var el=document.getElementById("toast");document.getElementById("toastTitle").textContent=title;document.getElementById("toastState").textContent=st;document.getElementById("toastText").textContent=text;el.classList.add("open");clearTimeout(showToast.t);showToast.t=setTimeout(function(){el.classList.remove("open")},ms||1800)}
+setTimeout(function(){document.getElementById("hint").style.opacity=".18"},6500);
+setTimeout(function(){document.getElementById("loader").classList.add("done")},220);
+setTimeout(function(){document.getElementById("loader").style.display="none"},800);
+})();
+</script>
+</body>
+</html>
