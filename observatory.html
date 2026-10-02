@@ -31,6 +31,13 @@ button,input{font:inherit}
 .pulse{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 7px currentColor;animation:p 1.5s ease-in-out infinite}
 @keyframes p{50%{opacity:.25}}
 .topspacer{flex:1}.clock{font-variant-numeric:tabular-nums}
+.helpbtn{height:100%;width:34px;border:0;border-left:1px solid var(--line);background:#0a0c0d;color:#7b878e;cursor:pointer}.helpbtn:hover{color:#e8eef1;background:#111518}
+.help{position:fixed;z-index:50;inset:0;background:rgba(2,4,5,.72);display:none;place-items:center;backdrop-filter:blur(5px)}.help.open{display:grid}
+.helpbox{width:620px;border:1px solid #354149;background:#080b0d;box-shadow:0 30px 90px rgba(0,0,0,.65)}
+.helphead{height:34px;border-bottom:1px solid #293137;display:flex;align-items:center;padding:0 11px;font-size:10px;letter-spacing:.11em}.helphead b{font-weight:600}.helphead span{flex:1}.helpclose{border:0;background:transparent;color:#79868d;cursor:pointer;font-size:15px}
+.helpbody{padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.helpstep{border:1px solid #1e262a;background:#0a0d0f;padding:10px}.helpstep small{color:#5d6a71;font-size:7px;letter-spacing:.12em}.helpstep b{display:block;margin:5px 0;color:#dbe3e7;font-size:10px}.helpstep p{margin:0;color:#7b888f;font-size:8px;line-height:1.6}.cmdexamples{grid-column:1/-1;border-top:1px solid #1e262a;padding-top:10px;color:#76838a;font-size:9px;line-height:1.8}.cmdexamples code{color:var(--cyan);background:#0d1214;padding:2px 5px}
+.clickable{cursor:pointer}.clickable:hover{outline:1px solid rgba(99,230,255,.16);outline-offset:-1px}
+
 .workspace{display:grid;grid-template-columns:242px minmax(620px,1fr) 316px;min-height:0}
 .col{min-width:0;min-height:0}
 .left{border-right:1px solid var(--line);display:grid;grid-template-rows:1.08fr .92fr 1fr;background:#07090a}
@@ -127,8 +134,9 @@ button,input{font:inherit}
     <div class="topseg">KODOKU <strong class="cyan">819.2K evals</strong></div>
     <div class="topseg navhide">ROUTER <strong>Sol → Sonnet → Checks</strong></div>
     <div class="topspacer"></div>
-    <div class="topseg"><span class="warn">LOCAL SIM</span></div>
+    <div class="topseg"><span class="warn">DEMO DATA</span></div>
     <div class="topseg clock" id="clock">--:--:--</div>
+    <button class="helpbtn" id="helpBtn" aria-label="how to use">?</button>
   </header>
 
   <main class="workspace">
@@ -137,10 +145,10 @@ button,input{font:inherit}
         <div class="hd"><span class="dot"></span><strong>PROJECTS / EXPERT CELLS</strong><span class="grow"></span><span class="count">7 ACTIVE</span></div>
         <div class="list">
           <div class="row active"><span class="ico">P</span><b>POLYMATH-LAB</b><em class="green">RUN</em></div>
-          <div class="row"><span class="ico">K</span><b>KODOKU evolution</b><em class="cyan">819K</em></div>
-          <div class="row"><span class="ico">S</span><b>AI Safety cell</b><em>12</em></div>
-          <div class="row"><span class="ico">B</span><b>Biology cell</b><em>9</em></div>
-          <div class="row"><span class="ico">M</span><b>Math / Formal</b><em>8</em></div>
+          <div class="row clickable" data-case="kodoku"><span class="ico">K</span><b>KODOKU evolution</b><em class="cyan">819K</em></div>
+          <div class="row clickable" data-case="safety"><span class="ico">S</span><b>AI Safety cell</b><em>12</em></div>
+          <div class="row clickable" data-case="biology"><span class="ico">B</span><b>Biology cell</b><em>9</em></div>
+          <div class="row clickable" data-case="math"><span class="ico">M</span><b>Math / Formal</b><em>8</em></div>
           <div class="row"><span class="ico">R</span><b>Robotics cell</b><em>7</em></div>
           <div class="row"><span class="ico">E</span><b>Economics cell</b><em>6</em></div>
           <div class="row"><span class="ico">L</span><b>Language cell</b><em>8</em></div>
@@ -197,9 +205,9 @@ button,input{font:inherit}
         </div>
 
         <div class="corpus" aria-hidden="true">
-          <article class="paper p1"><strong>[SOURCE 091] arXiv:2609.04127</strong><br>... autonomous systems should preserve <mark>meaningful dissent</mark> during evaluator convergence ... <span class="cite">§4.2 / p.17</span><br>critic independence remains a necessary but insufficient condition ...</article>
-          <article class="paper p2"><strong>[SOURCE 144] doi:10.1038/evo.1842</strong><br>... selection environments preserve variation when fitness signals are partially decoupled ... <mark>adaptive oversight</mark> may be modeled as maintained evaluator diversity ...</article>
-          <article class="paper p3"><strong>[CRITIC 07] contradiction packet</strong><br>Claim: stronger selection pressure improves convergence. Counter: excessive pressure induces lineage collapse and deceptive local optima. <mark>micro-test required</mark> before promotion.</article>
+          <article class="paper p1" id="paper1"><strong>[SOURCE 091] arXiv:2609.04127</strong><br>... autonomous systems should preserve <mark>meaningful dissent</mark> during evaluator convergence ... <span class="cite">§4.2 / p.17</span><br>critic independence remains a necessary but insufficient condition ...</article>
+          <article class="paper p2" id="paper2"><strong>[SOURCE 144] doi:10.1038/evo.1842</strong><br>... selection environments preserve variation when fitness signals are partially decoupled ... <mark>adaptive oversight</mark> may be modeled as maintained evaluator diversity ...</article>
+          <article class="paper p3" id="paper3"><strong>[CRITIC 07] contradiction packet</strong><br>Claim: stronger selection pressure improves convergence. Counter: excessive pressure induces lineage collapse and deceptive local optima. <mark>micro-test required</mark> before promotion.</article>
           <div class="anchor a1"><span>EXTRACT / SAFETY</span><b>DISSENT</b><em>.94</em></div>
           <div class="anchor a2"><span>EXTRACT / BIOLOGY</span><b>SELECTION</b><em>.88</em></div>
           <div class="anchor a3"><span>CRITIC / CONFLICT</span><b>COLLAPSE RISK</b><em>.71</em></div>
@@ -221,9 +229,9 @@ button,input{font:inherit}
         </div>
 
         <div class="analysis-strip">
-          <div><small>ACTIVE CLAIM</small><b class="cyan">maintain evaluator diversity under selection</b></div>
-          <div><small>CRITIC STATE</small><b class="amber">1 unresolved contradiction</b></div>
-          <div><small>NEXT ACTION</small><b class="good">micro-test / reversible / 12m budget</b></div>
+          <div><small>ACTIVE CLAIM</small><b class="cyan" id="activeClaim">maintain evaluator diversity under selection</b></div>
+          <div><small>CRITIC STATE</small><b class="amber" id="criticState">1 unresolved contradiction</b></div>
+          <div><small>NEXT ACTION</small><b class="good" id="nextAction">micro-test / reversible / 12m budget</b></div>
         </div>
 
         <aside class="nodecard" id="nodecard">
@@ -291,7 +299,7 @@ button,input{font:inherit}
             <div><span class="sys">[15:55:03]</span> evidence gate / held-out critic / lineage tracker <span class="ret">READY</span></div>
             <div><span class="sys">[15:55:04]</span> waiting for collision command</div>
           </div>
-          <form class="prompt" id="command"><span>polymath&gt;</span><input id="cmdInput" autocomplete="off" value="collide ai-safety biology --novelty high --micro-test"><button>RUN ↵</button></form>
+          <form class="prompt" id="command"><span>polymath&gt;</span><input id="cmdInput" autocomplete="off" placeholder="help | open safety | open kodoku | collide safety biology"><button>RUN ↵</button></form>
         </div>
         <div class="activity">
           <div class="metric"><span>LAST RUN</span><b class="ok">PASS</b><small>14 deterministic checks</small></div>
@@ -320,7 +328,7 @@ button,input{font:inherit}
       <section class="panel">
         <div class="hd"><span class="dot" style="background:var(--green)"></span><strong>HALL OF FAME</strong><span class="grow"></span><span class="count">9</span></div>
         <div class="hof">
-          <div class="hofitem"><span class="rank">01</span><div><b>Evidence-based Escalation</b><small>routing / compute allocation</small></div><span class="score">94.8</span></div>
+          <div class="hofitem clickable" data-case="hof"><span class="rank">01</span><div><b>Evidence-based Escalation</b><small>routing / compute allocation</small></div><span class="score">94.8</span></div>
           <div class="hofitem"><span class="rank">02</span><div><b>AFTERLIFE revival gate</b><small>reconsider / micro-test</small></div><span class="score">93.1</span></div>
           <div class="hofitem"><span class="rank">03</span><div><b>Closed-loop agent scaling</b><small>evaluate / select / reinvest</small></div><span class="score">91.7</span></div>
           <div class="hofitem"><span class="rank">04</span><div><b>Decision Genome</b><small>personal decision substrate</small></div><span class="score">88.9</span></div>
@@ -331,7 +339,7 @@ button,input{font:inherit}
       <section class="panel">
         <div class="hd"><span class="dot" style="background:var(--amber)"></span><strong>EXPERIMENTS / RUN QUEUE</strong><span class="grow"></span><span class="count">12 ACTIVE</span></div>
         <div class="list">
-          <div class="row"><span class="ico">1</span><b>Safety × Evolution</b><em class="green">RUN</em></div>
+          <div class="row clickable" data-case="safety-biology"><span class="ico">1</span><b>Safety × Evolution</b><em class="green">RUN</em></div>
           <div class="row"><span class="ico">2</span><b>Agent criticism depth</b><em class="cyan">62%</em></div>
           <div class="row"><span class="ico">3</span><b>Source freshness gate</b><em class="amber">HOLD</em></div>
           <div class="row"><span class="ico">4</span><b>Cross-field novelty</b><em class="green">PASS</em></div>
@@ -361,7 +369,7 @@ button,input{font:inherit}
   </main>
 
   <footer class="footer">
-    <div class="fseg">VISUALIZATION MODE <span class="warn" style="margin-left:6px">LOCAL SIM</span></div>
+    <div class="fseg">VISUALIZATION MODE <span class="warn" style="margin-left:6px">INTERACTIVE DEMO</span></div>
     <div class="fseg">FRAME <span id="fps" style="margin-left:6px;color:#9aa6ad">-- FPS</span></div>
     <div class="ticker"><div class="ticker-track">
       <b class="g">PASS HYP-241 independent critic</b>
@@ -373,6 +381,18 @@ button,input{font:inherit}
     </div></div>
     <div class="fseg">PRESS ENTER TO RUN COLLISION</div>
   </footer>
+</div>
+<div class="help" id="help">
+  <div class="helpbox">
+    <div class="helphead"><b>HOW TO USE // POLYMATH OPS</b><span></span><button class="helpclose" id="helpClose">×</button></div>
+    <div class="helpbody">
+      <div class="helpstep"><small>01 / SELECT</small><b>左・右の項目をクリック</b><p>専門家セル、KODOKU、HOF、実験をクリックすると、中央の解析対象が切り替わります。</p></div>
+      <div class="helpstep"><small>02 / INSPECT</small><b>中央で証拠と反証を見る</b><p>論文断片、抽出概念、critic、現在の主張、次のmicro-testを確認します。</p></div>
+      <div class="helpstep"><small>03 / ACT</small><b>下のCLIから操作</b><p>対象を開く、衝突させる、helpを出す、という操作ができます。</p></div>
+      <div class="helpstep"><small>04 / NOTE</small><b>今はDEMO DATA</b><p>見た目と操作系のプロトタイプです。まだPOLYMATH/KODOKUの実ランへは接続していません。</p></div>
+      <div class="cmdexamples">例: <code>open safety</code>　<code>open biology</code>　<code>open kodoku</code>　<code>open hof</code>　<code>collide safety biology</code>　<code>reset</code>　<code>help</code></div>
+    </div>
+  </div>
 </div>
 <div class="flash" id="flash"></div>
 
@@ -459,13 +479,79 @@ function lineChart(id,color){
  var el=document.getElementById(id),cx=el.getContext("2d"),vals=Array.from({length:56},function(_,i){return .48+Math.sin(i*.42)*.13+Math.sin(i*.13)*.10+Math.random()*.06});function rs(){var w=el.clientWidth,h=el.clientHeight,dd=Math.min(devicePixelRatio||1,1.5);el.width=w*dd;el.height=h*dd;cx.setTransform(dd,0,0,dd,0,0);cx.clearRect(0,0,w,h);cx.strokeStyle="#182024";cx.lineWidth=1;for(var k=1;k<4;k++){cx.beginPath();cx.moveTo(0,h*k/4);cx.lineTo(w,h*k/4);cx.stroke()}cx.strokeStyle=color;cx.lineWidth=1.3;cx.beginPath();vals.forEach(function(v,i){var px=i/(vals.length-1)*w,py=h-(v*.74+.08)*h;if(i===0)cx.moveTo(px,py);else cx.lineTo(px,py)});cx.stroke()}addEventListener("resize",rs);rs();setInterval(function(){vals.shift();vals.push(Math.max(.08,Math.min(.94,vals[vals.length-1]+(Math.random()-.5)*.14)));rs()},900)}
 lineChart("chartA",cols.cyan);
 
+var CASES={
+  default:{name:"ADAPTIVE OVERSIGHT",desc:"Safetyの「独立した批判」と進化系の「多様性維持」を同一の選択圧モデルとして検証中。",claim:"maintain evaluator diversity under selection",critic:"1 unresolved contradiction",next:"micro-test / reversible / 12m budget",m:[94,2,3,83],
+    p1:"<strong>[SOURCE 091] arXiv:2609.04127</strong><br>... autonomous systems should preserve <mark>meaningful dissent</mark> during evaluator convergence ... <span class='cite'>§4.2 / p.17</span><br>critic independence remains a necessary but insufficient condition ...",
+    p2:"<strong>[SOURCE 144] doi:10.1038/evo.1842</strong><br>... selection environments preserve variation when fitness signals are partially decoupled ... <mark>adaptive oversight</mark> may be modeled as maintained evaluator diversity ...",
+    p3:"<strong>[CRITIC 07] contradiction packet</strong><br>Claim: stronger selection pressure improves convergence. Counter: excessive pressure induces lineage collapse and deceptive local optima. <mark>micro-test required</mark> before promotion."},
+  safety:{name:"AI SAFETY / INDEPENDENT CRITIC",desc:"評価器が同じ方向へ収束しすぎる失敗を、独立criticと反証保持で監視。",claim:"preserve independent evaluators under convergence",critic:"2 adversarial cases open",next:"replay failure cases / critic split",m:[91,4,2,78],
+    p1:"<strong>[SAFETY CASE]</strong><br>Independent criticism must survive optimization pressure. <mark>Evaluator monoculture</mark> is treated as a failure mode.",
+    p2:"<strong>[EVAL TRACE 031]</strong><br>Two critics converged after shared context leakage. Isolation restored disagreement signal.",
+    p3:"<strong>[OPEN RISK]</strong><br>High agreement may indicate truth or correlated failure. <mark>Counterfactual critic required</mark>."},
+  biology:{name:"BIOLOGY / SELECTION PRESSURE",desc:"適応・多様性・局所最適を、探索アルゴリズムとエージェント設計へ翻訳。",claim:"preserve diversity before strong selection",critic:"local optimum risk = elevated",next:"lower pressure / inject outside lineage",m:[88,3,4,81],
+    p1:"<strong>[EVOLUTION NOTE]</strong><br>Premature selection removes rare traits before their value is observable. <mark>Diversity has option value</mark>.",
+    p2:"<strong>[LINEAGE TRACE]</strong><br>External bloodline injection restored search coverage after convergence.",
+    p3:"<strong>[CRITIC]</strong><br>Diversity without pressure becomes drift. Balance preservation with measurable fitness."},
+  math:{name:"MATH / FORMAL GATE",desc:"曖昧な主張を測定可能な定義・目的関数・停止条件へ変換。",claim:"formalize survival before optimizing it",critic:"objective mismatch unresolved",next:"define invariants / falsification threshold",m:[86,2,5,76],
+    p1:"<strong>[FORMALIZATION]</strong><br>Define state, transition, evaluator, and invariant before comparing policies.",
+    p2:"<strong>[OBJECTIVE AUDIT]</strong><br>Scalar fitness hides trade-offs. <mark>Multi-objective surface</mark> recommended.",
+    p3:"<strong>[CRITIC]</strong><br>Proof of local property does not imply system-level robustness."},
+  kodoku:{name:"KODOKU / GENERATION 1842",desc:"候補を生成→評価→選択→変異し、系譜とHall of Fameを保存する探索ループ。",claim:"preserve strong lineages without collapsing diversity",critic:"19 survivors / ancestry concentration high",next:"mutate survivors + outside bloodline",m:[87,5,19,91],
+    p1:"<strong>[GEN 1842]</strong><br>512 candidates evaluated. 19 survived. <mark>Ancestry concentration</mark> increasing.",
+    p2:"<strong>[HOF TRACE]</strong><br>Top lineage retains evidence-routing trait across 6 generations.",
+    p3:"<strong>[NEXT]</strong><br>Inject outside bloodline before the next strong-selection phase."},
+  hof:{name:"HOF / EVIDENCE-BASED ESCALATION",desc:"標準モデル→決定論的検証→失敗時だけ上位へ昇格する運用原理。",claim:"allocate compute only when evidence justifies escalation",critic:"edge cases: spec conflict / hidden failure",next:"held-out replay / threshold calibration",m:[95,2,6,95],
+    p1:"<strong>[HOF #01]</strong><br>Low/medium tasks remain on standard route until deterministic checks fail.",
+    p2:"<strong>[EVIDENCE]</strong><br>Escalation after repeated same-class failure reduced waste while preserving quality.",
+    p3:"<strong>[CRITIC]</strong><br>Silent specification errors can pass checks. <mark>Independent review remains required</mark>."},
+  "safety-biology":{name:"SAFETY × EVOLUTION COLLISION",desc:"独立criticを生物学的な多様性維持として再解釈し、選択圧とlineage collapseを同時に見る。",claim:"independent critics behave like preserved diversity",critic:"analogy validity not yet proven",next:"reversible micro-test / compare baselines",m:[93,3,3,86],
+    p1:"<strong>[BRIDGE]</strong><br>Evaluator diversity may play the same search-preserving role as biological variation.",
+    p2:"<strong>[COUNTER]</strong><br>Biological analogy can mislead when mutation and selection mechanisms differ.",
+    p3:"<strong>[MICRO-TEST]</strong><br>Compare mono-critic vs diverse-critic runs under identical selection pressure."}
+};
+function loadCase(key){
+  var d=CASES[key]||CASES.default;
+  document.getElementById("selName").textContent=d.name;
+  document.getElementById("selDesc").textContent=d.desc;
+  document.getElementById("activeClaim").textContent=d.claim;
+  document.getElementById("criticState").textContent=d.critic;
+  document.getElementById("nextAction").textContent=d.next;
+  document.getElementById("n1").textContent=d.m[0];document.getElementById("n2").textContent=d.m[1];document.getElementById("n3").textContent=d.m[2];document.getElementById("n4").textContent=d.m[3];
+  document.getElementById("paper1").innerHTML=d.p1;document.getElementById("paper2").innerHTML=d.p2;document.getElementById("paper3").innerHTML=d.p3;
+  document.querySelectorAll("[data-case]").forEach(function(el){el.classList.toggle("active",el.dataset.case===key)});
+}
+document.querySelectorAll("[data-case]").forEach(function(el){el.addEventListener("click",function(){loadCase(el.dataset.case)})});
+document.getElementById("helpBtn").addEventListener("click",function(){document.getElementById("help").classList.add("open")});
+document.getElementById("helpClose").addEventListener("click",function(){document.getElementById("help").classList.remove("open")});
+document.getElementById("help").addEventListener("click",function(e){if(e.target.id==="help")e.currentTarget.classList.remove("open")});
 var flash=document.getElementById("flash"),cli=document.getElementById("cliout");
 function addCli(text,cls){var d=document.createElement("div");d.innerHTML='<span class="sys">['+new Date().toLocaleTimeString("en-GB")+']</span> <span class="'+(cls||"")+'">'+text+"</span>";cli.appendChild(d);while(cli.children.length>6)cli.removeChild(cli.firstChild);cli.scrollTop=cli.scrollHeight}
-document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim();addCli("&gt; "+v,"cmd");addCli("dispatching specialist collision / evidence gate / novelty critic ...","warn");S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");document.getElementById("selName").textContent="DISSENT × SELECTION";document.getElementById("selDesc").textContent="独立した批判を、進化的な多様性維持として再解釈。過剰な選択圧によるlineage collapseを反証側で監視。";setTimeout(function(){addCli("3 candidate bridges generated → 1 reversible micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19;document.getElementById("n1").textContent=96;document.getElementById("n2").textContent=3;document.getElementById("n3").textContent=4;document.getElementById("n4").textContent=86},2200)});
+document.getElementById("command").addEventListener("submit",function(e){
+  e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim().toLowerCase();if(!v)return;
+  addCli("&gt; "+v,"cmd");
+  if(v==="help"){document.getElementById("help").classList.add("open");addCli("help opened","ret");return}
+  if(v==="reset"){loadCase("default");S.targetX=0;S.targetY=0;addCli("analysis surface reset","ret");return}
+  if(v.indexOf("open ")===0){
+    var key=v.slice(5).trim().replace("ai-safety","safety");
+    if(key==="hall of fame")key="hof";
+    if(CASES[key]){loadCase(key);addCli("opened "+key+" analysis packet","ret")}else addCli("unknown target: "+key+" / type help","warn");
+    return;
+  }
+  if(v.indexOf("collide ")===0){
+    var parts=v.split(/\s+/);
+    var a=parts[1]||"safety",b=parts[2]||"biology";
+    loadCase((a.indexOf("safety")>=0&&b.indexOf("bio")>=0)||(b.indexOf("safety")>=0&&a.indexOf("bio")>=0)?"safety-biology":"default");
+    addCli("dispatching "+a+" × "+b+" / evidence gate / novelty critic ...","warn");
+    S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");
+    setTimeout(function(){addCli("3 candidate bridges generated → 1 reversible micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19},2200);
+    return;
+  }
+  addCli("unknown command / type help","warn");
+});
 function clock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-GB")}clock();setInterval(clock,1000);
 var frame=0,last=performance.now();function fps(t){frame++;if(t-last>1000){document.getElementById("fps").textContent=Math.round(frame*1000/(t-last))+" FPS";frame=0;last=t}requestAnimationFrame(fps)}requestAnimationFrame(fps);
 setInterval(function(){document.getElementById("cycle").textContent="#"+(1842+Math.floor((Date.now()/9000)%19));document.getElementById("throughput").textContent=(122+Math.floor(Math.random()*15))+"/h";document.getElementById("rejectRate").textContent=(70+Math.random()*4).toFixed(1)+"%";document.querySelectorAll(".ref").forEach(function(el,i){el.style.opacity=(.48+Math.random()*.42).toFixed(2);if(i===4)el.textContent="BRIDGE:SAFETY→BIO / "+(.81+Math.random()*.08).toFixed(2)})},2800);
-select("core");
+loadCase("default");
 })();
 </script>
 </body>
