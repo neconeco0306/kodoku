@@ -2,189 +2,385 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#02040a">
-<title>POLYMATH OBSERVATORY</title>
-<meta name="description" content="POLYMATH / KODOKU interactive 3D research universe.">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#050607">
+<title>POLYMATH // RESEARCH OPS TERMINAL</title>
+<meta name="description" content="High-density research operations terminal for POLYMATH and KODOKU.">
 <style>
-:root{color-scheme:dark;--ink:#f5f8ff;--muted:#7f90b1;--hair:rgba(139,183,255,.16);--cyan:#65e4ff;--violet:#9e7cff;--gold:#ffd28b}
-*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#02040a;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI","Noto Sans JP",sans-serif}
-button,input{font:inherit}#gl{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;cursor:grab}#gl:active{cursor:grabbing}
-body:before{content:"";position:fixed;inset:0;z-index:2;pointer-events:none;background:
-radial-gradient(ellipse at 50% 46%,transparent 22%,rgba(3,5,15,.08) 50%,rgba(0,0,0,.68) 100%),
-linear-gradient(180deg,rgba(4,10,25,.18),transparent 28%,transparent 70%,rgba(0,0,0,.42))}
-body:after{content:"";position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.13;mix-blend-mode:soft-light;background-image:repeating-radial-gradient(circle at 20% 20%,rgba(255,255,255,.16) 0 .3px,transparent .45px 3px);background-size:5px 5px}
-.ui{position:fixed;inset:0;z-index:6;pointer-events:none}.glass{background:linear-gradient(135deg,rgba(10,18,39,.64),rgba(5,9,22,.34));border:1px solid var(--hair);box-shadow:inset 0 1px rgba(255,255,255,.045),0 24px 72px rgba(0,0,0,.28);backdrop-filter:blur(20px) saturate(130%);-webkit-backdrop-filter:blur(20px) saturate(130%)}
-.brand{position:absolute;left:24px;top:22px}.brand p,.ey{margin:0;font-size:8px;letter-spacing:.24em;color:#8292b6;font-weight:700;text-transform:uppercase}.brand h1{margin:6px 0 0;font-size:17px;font-weight:550;letter-spacing:.32em}
-.live{position:absolute;right:24px;top:24px;display:flex;align-items:center;gap:8px;font-size:7px;letter-spacing:.18em;color:#91a3c5}.led{width:6px;height:6px;border-radius:50%;background:#74ffd4;box-shadow:0 0 16px #61ffd0;animation:pulse 1.7s ease-in-out infinite}@keyframes pulse{50%{opacity:.45;transform:scale(.8)}}
-.hero{position:absolute;left:24px;top:95px;width:230px}.hero .index{display:flex;align-items:center;gap:8px;font-size:7px;letter-spacing:.2em;color:#6f81a3}.rule{width:30px;height:1px;background:linear-gradient(90deg,#65e4ff,transparent)}.hero h2{font-size:27px;line-height:.95;font-weight:410;letter-spacing:-.04em;margin:10px 0 9px}.hero p{font-size:9px;line-height:1.65;color:#7585a5;margin:0;max-width:205px}
-.labels{position:fixed;inset:0;pointer-events:none}.label{position:absolute;transform:translate(-50%,-50%);padding:5px 8px;border:1px solid rgba(158,194,255,.12);border-radius:999px;background:rgba(4,8,19,.48);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);white-space:nowrap;color:#dbe8ff;font-size:7px;letter-spacing:.08em;box-shadow:0 7px 22px rgba(0,0,0,.2);transition:opacity .16s}.label:before{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--c,#65e4ff);box-shadow:0 0 9px var(--c,#65e4ff);margin-right:6px;vertical-align:0}.label.core{font-size:8px;color:#fff2d7;border-color:rgba(255,210,139,.2);padding:6px 10px}
-.panel{position:absolute;right:22px;top:92px;width:300px;border-radius:18px;padding:15px;pointer-events:auto;transition:.4s cubic-bezier(.2,.8,.2,1)}.panel .head{display:flex;justify-content:space-between;gap:10px}.panel h3{margin:5px 0 0;font-size:20px;font-weight:520;letter-spacing:-.02em}.chip{height:max-content;border:1px solid rgba(105,226,255,.24);border-radius:999px;padding:5px 7px;background:rgba(80,172,255,.07);color:#9edfff;font-size:6px;letter-spacing:.18em}.desc{font-size:9px;line-height:1.65;color:#8999b7;margin:11px 0 12px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.metrics div{padding:7px 6px;border:1px solid rgba(157,191,255,.09);border-radius:10px;background:rgba(255,255,255,.015)}.metrics span{display:block;font-size:5px;letter-spacing:.14em;color:#65779a}.metrics strong{display:block;margin-top:4px;font-size:14px;font-weight:460}.trace{margin-top:8px;height:38px;border-top:1px solid rgba(255,255,255,.05)}.trace svg{width:100%;height:42px;filter:drop-shadow(0 0 5px rgba(101,228,255,.55))}
-.close{display:none}
-.nav{position:absolute;left:22px;bottom:22px;display:flex;gap:2px;padding:5px;border-radius:16px;pointer-events:auto}.nav button{border:0;background:transparent;color:#68799b;min-width:78px;height:46px;border-radius:11px;cursor:pointer;transition:.2s}.nav b{display:block;font-size:12px;font-weight:400;margin-bottom:3px}.nav small{display:block;font-size:5px;letter-spacing:.16em}.nav button.on,.nav button:hover{color:#f4f9ff;background:linear-gradient(135deg,rgba(55,146,255,.16),rgba(128,80,255,.08));box-shadow:inset 0 0 0 1px rgba(107,210,255,.12)}
-.command{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);width:min(540px,calc(100vw - 760px));min-width:340px;height:56px;border-radius:17px;padding:6px;display:grid;grid-template-columns:1fr 45px;gap:5px;pointer-events:auto}.command input{border:0;outline:0;background:transparent;color:#eaf4ff;padding:0 12px;font-size:10px}.command button{border:1px solid rgba(125,217,255,.28);border-radius:12px;color:#fff;background:radial-gradient(circle at 30% 22%,rgba(125,228,255,.4),transparent 45%),linear-gradient(135deg,#174d8d,#51339d);box-shadow:0 0 22px rgba(62,136,255,.18);font-size:16px;cursor:pointer}.command button:active{transform:scale(.94)}
-.toast{position:absolute;left:50%;bottom:91px;transform:translate(-50%,18px);opacity:0;width:min(450px,calc(100vw - 32px));padding:11px 13px;border-radius:14px;transition:.4s cubic-bezier(.2,.8,.2,1)}.toast.open{opacity:1;transform:translate(-50%,0)}.toast .row{display:flex;justify-content:space-between;gap:10px}.toast strong{font-size:8px;letter-spacing:.12em}.toast em{font-style:normal;font-size:6px;color:#6effd0;letter-spacing:.16em}.toast p{margin:6px 0 0;color:#8190ad;font-size:8px;line-height:1.55}
-.hint{position:absolute;left:50%;top:27px;transform:translateX(-50%);font-size:6px;letter-spacing:.18em;color:#566684;transition:opacity 1s;white-space:nowrap}.corner{position:absolute;width:36px;height:36px;opacity:.3}.tl{left:13px;top:13px;border-left:1px solid #6aaeff;border-top:1px solid #6aaeff}.tr{right:13px;top:13px;border-right:1px solid #6aaeff;border-top:1px solid #6aaeff}
-.loader{position:fixed;z-index:20;inset:0;display:grid;place-items:center;background:#02040a;transition:opacity .45s}.loader.done{opacity:0;pointer-events:none}.mark{position:relative;width:96px;height:96px;border:1px solid rgba(106,177,255,.15);border-radius:50%;display:grid;place-items:center}.mark:before,.mark:after{content:"";position:absolute;border:1px solid rgba(106,196,255,.26);border-radius:50%;inset:12px;animation:spin 1.8s linear infinite}.mark:after{inset:29px;border-color:rgba(158,117,255,.36);animation-direction:reverse;animation-duration:1.2s}.mark span{font-size:6px;letter-spacing:.24em;color:#8497ba}@keyframes spin{to{transform:rotate(360deg)}}
-.fallback{display:none;position:fixed;z-index:30;inset:0;background:#030610;padding:34px 24px;color:#dce8ff}.fallback h2{font-size:26px;font-weight:500}
-@media(max-width:1020px){.command{width:min(440px,47vw);min-width:290px}.nav button{min-width:64px}.panel{width:260px}}
-@media(max-width:760px){
- .corner{display:none}.brand{left:17px;top:17px}.brand p{font-size:6px}.brand h1{font-size:14px;letter-spacing:.28em}.live{right:17px;top:20px}.hint{top:49px;font-size:5px}
- .hero{left:17px;top:76px;width:170px}.hero .index{font-size:5px}.hero h2{font-size:20px;margin:7px 0}.hero p{display:none}
- .label{font-size:6px;padding:4px 6px}.label.core{font-size:7px;padding:5px 8px}
- .panel{left:14px;right:14px;top:auto;bottom:139px;width:auto;opacity:0;transform:translateY(18px);pointer-events:none;padding:11px 12px;border-radius:15px}.panel.open{opacity:1;transform:none;pointer-events:auto}.panel .head{padding-right:24px}.panel h3{font-size:15px;margin-top:2px}.panel .desc{font-size:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin:7px 0}.metrics{gap:4px}.metrics div{padding:6px}.metrics strong{font-size:12px}.trace{display:none}.close{display:grid;place-items:center;position:absolute;right:9px;top:8px;width:25px;height:25px;border:0;border-radius:50%;color:#8190ad;background:rgba(255,255,255,.04)}
- .nav{left:14px;right:14px;bottom:75px;height:53px;padding:4px;justify-content:space-between}.nav button{min-width:0;flex:1;height:43px;padding:0 2px}.nav b{font-size:10px;margin-bottom:2px}.nav small{font-size:4.5px;letter-spacing:.1em}
- .command{left:14px;right:14px;bottom:max(13px,env(safe-area-inset-bottom));transform:none;width:auto;min-width:0;height:52px;border-radius:15px}.command input{font-size:9px;padding:0 9px}.command button{border-radius:11px}
- .toast{bottom:139px}.toast strong{font-size:7px}.toast p{font-size:7px}
+:root{
+  color-scheme:dark;
+  --bg:#050607;--panel:#090b0d;--panel2:#0c0f12;--line:#252a2e;--line2:#333a40;
+  --text:#e7ecef;--muted:#6f7a82;--dim:#4c555c;
+  --cyan:#63e6ff;--green:#78ffb0;--lime:#b9ff63;--amber:#ffc66d;--red:#ff6b73;--violet:#b38cff;--blue:#6fa3ff;
+  --mono:"SFMono-Regular","Cascadia Code","Roboto Mono","Menlo","Consolas",monospace;
 }
-@media(prefers-reduced-motion:reduce){.led,.mark:before,.mark:after{animation:none}}
+*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--mono);font-size:12px}
+body{background:
+  radial-gradient(circle at 45% 30%,rgba(58,89,102,.08),transparent 35%),
+  linear-gradient(180deg,#070809 0%,#040506 100%)}
+button,input{font:inherit}
+#app{width:100vw;height:100vh;min-width:1180px;min-height:720px;display:grid;grid-template-rows:34px 1fr 28px;overflow:hidden}
+.topbar,.footer{display:flex;align-items:center;border-color:var(--line);background:#080a0b;position:relative;z-index:8}
+.topbar{border-bottom:1px solid var(--line)}
+.footer{border-top:1px solid var(--line);color:#657079;font-size:10px}
+.logo{height:100%;display:flex;align-items:center;padding:0 12px;border-right:1px solid var(--line);font-weight:800;letter-spacing:.16em;color:#f4f7f8}
+.logo i{display:inline-block;width:8px;height:8px;border:1px solid var(--green);box-shadow:0 0 8px rgba(120,255,176,.45);margin-right:8px}
+.topseg{height:100%;display:flex;align-items:center;gap:7px;padding:0 11px;border-right:1px solid var(--line);color:#7d8991;font-size:10px;white-space:nowrap}
+.topseg strong{font-weight:600;color:#cdd4d8}.ok{color:var(--green)!important}.warn{color:var(--amber)!important}.hot{color:var(--red)!important}
+.pulse{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 7px currentColor;animation:p 1.5s ease-in-out infinite}
+@keyframes p{50%{opacity:.25}}
+.topspacer{flex:1}.clock{font-variant-numeric:tabular-nums}
+.workspace{display:grid;grid-template-columns:242px minmax(620px,1fr) 316px;min-height:0}
+.col{min-width:0;min-height:0}
+.left{border-right:1px solid var(--line);display:grid;grid-template-rows:1.08fr .92fr 1fr;background:#07090a}
+.center{display:grid;grid-template-rows:minmax(360px,1.55fr) minmax(186px,.8fr) 120px;min-width:0}
+.right{border-left:1px solid var(--line);display:grid;grid-template-rows:1.05fr .9fr .8fr 1.05fr;background:#07090a}
+.panel{min-height:0;overflow:hidden;border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(13,15,17,.96),rgba(8,10,11,.98))}
+.panel:last-child{border-bottom:0}
+.hd{height:28px;border-bottom:1px solid var(--line);display:flex;align-items:center;padding:0 9px;background:#0a0c0e;gap:7px;color:#839099;font-size:9px;letter-spacing:.12em;white-space:nowrap}
+.hd .dot{width:5px;height:5px;background:var(--cyan);box-shadow:0 0 7px rgba(99,230,255,.65)}
+.hd strong{color:#cfd7dc;font-weight:700}.hd .grow{flex:1}.hd .count{color:#566168}
+.pad{padding:8px}
+.list{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:16px minmax(0,1fr) auto;align-items:center;gap:7px;min-height:27px;padding:4px 8px;border-bottom:1px solid #111518;color:#87939a}
+.row:hover{background:#0c1012;color:#dce3e6}
+.row.active{background:linear-gradient(90deg,rgba(99,230,255,.08),transparent);color:#e7edef}
+.ico{width:12px;height:12px;border:1px solid #3a454b;display:grid;place-items:center;font-size:7px;color:#738089}.row.active .ico{border-color:#4c8e99;color:var(--cyan);box-shadow:0 0 8px rgba(99,230,255,.12)}
+.row b{font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.row em{font-style:normal;font-size:9px;color:#536067}
+.row .green{color:var(--green)}.row .amber{color:var(--amber)}.row .red{color:var(--red)}.row .cyan{color:var(--cyan)}.row .violet{color:var(--violet)}
+.minirow{display:grid;grid-template-columns:52px 1fr 38px;align-items:center;gap:6px;padding:3px 8px;font-size:9px;color:#748088}
+.bar{height:5px;background:#171c1f;position:relative;overflow:hidden}.bar i{display:block;height:100%;background:currentColor;box-shadow:0 0 6px currentColor}
+.term{font-size:9px;line-height:1.52;color:#758189;padding:7px 9px;font-variant-numeric:tabular-nums}
+.term div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.term .ts{color:#4f5a60}.term .tag{color:var(--cyan)}.term .good{color:var(--green)}.term .bad{color:var(--red)}.term .v{color:var(--violet)}.term .a{color:var(--amber)}
+.mainviz{position:relative;overflow:hidden;background:#040607}
+#graph{position:absolute;inset:0;width:100%;height:100%;display:block}
+.scan{position:absolute;inset:0;pointer-events:none;background:
+ linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px),
+ linear-gradient(90deg,rgba(255,255,255,.009) 1px,transparent 1px);
+ background-size:22px 22px;mix-blend-mode:screen}
+.scan:after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(99,230,255,.22),transparent);animation:scan 5s linear infinite}
+@keyframes scan{from{top:-5%}to{top:105%}}
+.viztitle{position:absolute;left:12px;top:10px;pointer-events:none}
+.viztitle small{color:#64717a;font-size:8px;letter-spacing:.14em}.viztitle h1{font-size:16px;letter-spacing:.08em;margin:4px 0 0;font-weight:600}
+.vizmeta{position:absolute;right:10px;top:9px;display:flex;gap:5px;pointer-events:none}
+.badge{border:1px solid #253037;background:rgba(6,10,12,.76);padding:4px 6px;color:#6f7b83;font-size:8px}.badge b{color:#c5cdd1;font-weight:600}
+.legend{position:absolute;left:10px;bottom:9px;display:flex;gap:9px;color:#5e6970;font-size:8px;pointer-events:none}
+.legend span:before{content:"";display:inline-block;width:5px;height:5px;background:currentColor;margin-right:4px}
+.nodecard{position:absolute;right:10px;bottom:10px;width:245px;background:rgba(7,9,11,.88);border:1px solid #293138;box-shadow:0 14px 40px rgba(0,0,0,.36);padding:8px 9px;pointer-events:none}
+.nodecard .ey{color:#64717a;font-size:7px;letter-spacing:.12em}.nodecard h3{margin:4px 0 3px;font-size:12px}.nodecard p{margin:0;color:#78848c;font-size:8px;line-height:1.5}
+.nodegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px}.nodegrid div{border-top:1px solid #20272b;padding-top:4px}.nodegrid span{display:block;color:#566168;font-size:6px}.nodegrid b{display:block;color:#d7dee1;margin-top:2px;font-size:10px;font-weight:500}
+.middle{display:grid;grid-template-columns:1.05fr .95fr 1fr;min-height:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.middle .panel{border-bottom:0;border-right:1px solid var(--line)}.middle .panel:last-child{border-right:0}
+.chartbox{height:calc(100% - 28px);padding:7px 8px;display:flex;flex-direction:column;gap:5px}
+.chartline{height:58px;border:1px solid #1d2327;background:#080a0b;position:relative;overflow:hidden}
+.chartline canvas{width:100%;height:100%}
+.statrow{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.stat{border:1px solid #1c2226;background:#090c0d;padding:5px 6px}.stat span{display:block;font-size:6px;color:#59656c;letter-spacing:.08em}.stat b{display:block;margin-top:3px;font-weight:500;font-size:11px;color:#dce2e5}
+.matrix{display:grid;grid-template-columns:72px repeat(4,1fr);font-size:8px;border-left:1px solid #1c2226;border-top:1px solid #1c2226}
+.matrix div{min-height:24px;display:grid;place-items:center;border-right:1px solid #1c2226;border-bottom:1px solid #1c2226;color:#66727a}
+.matrix .lab{justify-content:start;padding-left:6px;color:#7b878e}.matrix .hi{background:rgba(120,255,176,.08);color:var(--green)}.matrix .mid{background:rgba(255,198,109,.06);color:var(--amber)}.matrix .lo{color:#4d585f}
+.pressures{padding:5px 8px}.pressure{display:grid;grid-template-columns:62px 1fr 42px;gap:6px;align-items:center;margin:6px 0}.pressure span{font-size:8px;color:#78848b}.pressure .track{height:8px;background:#161b1e;position:relative}.pressure .fill{height:100%;box-shadow:0 0 8px currentColor}.pressure b{text-align:right;font-size:9px;font-weight:500}
+.commandzone{display:grid;grid-template-columns:1.2fr .8fr;min-height:0;background:#07090a}
+.cli{border-right:1px solid var(--line);padding:7px 9px;min-width:0;overflow:hidden}
+.cliout{height:72px;overflow:hidden;font-size:9px;line-height:1.5;color:#768189}.cliout div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cliout .sys{color:#58636a}.cliout .cmd{color:#d9e0e3}.cliout .ret{color:var(--green)}.cliout .warn{color:var(--amber)}
+.prompt{height:30px;border-top:1px solid #1d2327;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:7px}.prompt span{color:var(--cyan)}.prompt input{min-width:0;background:transparent;border:0;outline:0;color:#e6edef;font-size:9px}.prompt button{border:0;background:#11171a;color:#7edff1;border-left:1px solid #28343a;height:100%;padding:0 12px;cursor:pointer}.prompt button:hover{background:#152126;color:#b4f3ff}
+.activity{padding:6px 8px;display:grid;grid-template-columns:1fr 1fr;gap:5px}.metric{border:1px solid #1c2226;padding:6px;background:#090b0d}.metric span{font-size:6px;color:#59636a}.metric b{display:block;margin-top:4px;font-size:12px;font-weight:500}.metric small{display:block;margin-top:2px;font-size:7px;color:#5c676e}
+.hof{padding:6px}.hofitem{display:grid;grid-template-columns:18px 1fr auto;gap:6px;align-items:center;padding:5px 4px;border-bottom:1px solid #171c1f}.rank{color:#526069;font-size:8px}.hofitem b{font-size:8px;font-weight:500;color:#cbd3d7}.hofitem small{display:block;font-size:7px;color:#5e6970;margin-top:2px}.score{color:var(--green);font-size:8px}
+.survivor{padding:6px 8px;border-bottom:1px solid #171c1f}.survivor .top{display:flex;justify-content:space-between;gap:8px}.survivor b{font-size:8px}.survivor em{font-style:normal;font-size:8px}.survivor .rail{height:6px;background:#151a1d;margin-top:5px;display:flex}.survivor .rail i{height:100%}.s1{background:var(--green)}.s2{background:var(--cyan)}.s3{background:var(--violet)}.s4{background:var(--red)}
+.source{display:grid;grid-template-columns:1fr auto;gap:8px;padding:5px 8px;border-bottom:1px solid #171c1f}.source b{font-size:8px;font-weight:500}.source small{display:block;color:#59656c;font-size:7px;margin-top:2px}.source em{font-style:normal;font-size:8px;color:#6f7d84}
+.footer .fseg{height:100%;display:flex;align-items:center;padding:0 9px;border-right:1px solid var(--line);white-space:nowrap}.ticker{flex:1;overflow:hidden;white-space:nowrap;position:relative}.ticker-track{display:inline-block;padding-left:100%;animation:ticker 36s linear infinite}.ticker b{font-weight:500;margin-right:34px}.ticker .g{color:var(--green)}.ticker .c{color:var(--cyan)}.ticker .a{color:var(--amber)}.ticker .r{color:var(--red)}
+@keyframes ticker{to{transform:translateX(-100%)}}
+.flash{position:fixed;inset:34px 0 28px;z-index:20;pointer-events:none;opacity:0;background:radial-gradient(circle at 50% 40%,rgba(99,230,255,.18),rgba(179,140,255,.08) 16%,transparent 34%);mix-blend-mode:screen}.flash.on{animation:flash .75s ease-out}@keyframes flash{0%{opacity:0}22%{opacity:1}100%{opacity:0}}
+@media(max-width:1250px){.workspace{grid-template-columns:220px minmax(610px,1fr) 286px}.navhide{display:none}}
 </style>
 </head>
 <body>
-<div class="loader" id="loader"><div class="mark"><span>POLYMATH</span></div></div>
-<div class="fallback" id="fallback"><h2>この端末で3Dを開始できませんでした。</h2><p>ページを再読み込みしてください。</p></div>
-<canvas id="gl" aria-label="POLYMATH 3D knowledge universe"></canvas>
-<div class="ui">
- <i class="corner tl"></i><i class="corner tr"></i>
- <header class="brand"><p>POLYMATH / RESEARCH UNIVERSE</p><h1>OBSERVATORY</h1></header>
- <div class="live"><i class="led"></i><span id="status">SYSTEM ONLINE</span></div>
- <div class="hint" id="hint">DRAG TO ORBIT · PINCH TO DIVE · TAP A CONSTELLATION</div>
- <section class="hero"><div class="index"><i class="rule"></i><span id="modeIndex">LIVE / 001</span></div><h2 id="modeTitle">Knowledge<br>Universe</h2><p id="modeCopy">専門知・仮説・実験・失敗を、同じ空間で衝突させる。</p></section>
- <div class="labels" id="labels"></div>
- <section class="panel glass" id="panel">
-   <button class="close" id="close">×</button>
-   <div class="head"><div><p class="ey">SELECTED CONSTELLATION</p><h3 id="panelTitle">HALL OF FAME</h3></div><span class="chip" id="chip">CORE</span></div>
-   <p class="desc" id="panelDesc">検証を生き残った発見・運用原理・血統が集まる中心核。</p>
-   <div class="metrics"><div><span>ACTIVE</span><strong id="m1">128</strong></div><div><span>HYP.</span><strong id="m2">34</strong></div><div><span>EXP.</span><strong id="m3">12</strong></div><div><span>HOF</span><strong id="m4">9</strong></div></div>
-   <div class="trace"><svg viewBox="0 0 280 46" preserveAspectRatio="none"><path d="M0 38 C22 37 27 15 49 23 S77 41 94 29 121 8 141 18 163 37 180 26 204 12 224 18 246 33 280 7" fill="none" stroke="#65e4ff" stroke-width="1.2"/></svg></div>
- </section>
- <nav class="nav glass" id="nav">
-   <button class="on" data-mode="explore"><b>◎</b><small>EXPLORE</small></button>
-   <button data-mode="hypotheses"><b>◇</b><small>HYPOTHESES</small></button>
-   <button data-mode="experiments"><b>△</b><small>EXPERIMENTS</small></button>
-   <button data-mode="evolution"><b>⌁</b><small>KODOKU</small></button>
-   <button data-mode="discoveries"><b>✦</b><small>DISCOVERIES</small></button>
- </nav>
- <form class="command glass" id="command"><input id="prompt" value="AI safetyと進化生物学を衝突させて"><button aria-label="run">↗</button></form>
- <aside class="toast glass" id="toast"><div class="row"><strong id="toastTitle">CROSS-DOMAIN COLLISION</strong><em id="toastState">COMPLETE</em></div><p id="toastText">3件の候補ブリッジを抽出しました。</p></aside>
+<div id="app">
+  <header class="topbar">
+    <div class="logo"><i></i>POLYMATH // OPS</div>
+    <div class="topseg"><span class="pulse ok"></span><strong class="ok">RUNNING</strong></div>
+    <div class="topseg">CYCLE <strong id="cycle">#1842</strong></div>
+    <div class="topseg">SPECIALISTS <strong id="specialists">42</strong></div>
+    <div class="topseg">ACTIVE HYP. <strong id="hypTop">34</strong></div>
+    <div class="topseg">KODOKU <strong class="cyan">819.2K evals</strong></div>
+    <div class="topseg navhide">ROUTER <strong>Sol → Sonnet → Checks</strong></div>
+    <div class="topspacer"></div>
+    <div class="topseg"><span class="warn">LOCAL SIM</span></div>
+    <div class="topseg clock" id="clock">--:--:--</div>
+  </header>
+
+  <main class="workspace">
+    <aside class="col left">
+      <section class="panel">
+        <div class="hd"><span class="dot"></span><strong>PROJECTS / EXPERT CELLS</strong><span class="grow"></span><span class="count">7 ACTIVE</span></div>
+        <div class="list">
+          <div class="row active"><span class="ico">P</span><b>POLYMATH-LAB</b><em class="green">RUN</em></div>
+          <div class="row"><span class="ico">K</span><b>KODOKU evolution</b><em class="cyan">819K</em></div>
+          <div class="row"><span class="ico">S</span><b>AI Safety cell</b><em>12</em></div>
+          <div class="row"><span class="ico">B</span><b>Biology cell</b><em>9</em></div>
+          <div class="row"><span class="ico">M</span><b>Math / Formal</b><em>8</em></div>
+          <div class="row"><span class="ico">R</span><b>Robotics cell</b><em>7</em></div>
+          <div class="row"><span class="ico">E</span><b>Economics cell</b><em>6</em></div>
+          <div class="row"><span class="ico">L</span><b>Language cell</b><em>8</em></div>
+          <div class="row"><span class="ico">X</span><b>Cross-domain critic</b><em class="violet">ON</em></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--green)"></span><strong>MODEL / COMPUTE ROUTER</strong><span class="grow"></span><span class="count">EVIDENCE GATED</span></div>
+        <div class="pad">
+          <div class="minirow"><span>STANDARD</span><div class="bar" style="color:var(--cyan)"><i style="width:76%"></i></div><b>76%</b></div>
+          <div class="minirow"><span>SONNET</span><div class="bar" style="color:var(--green)"><i style="width:61%"></i></div><b>61%</b></div>
+          <div class="minirow"><span>SOL</span><div class="bar" style="color:var(--violet)"><i style="width:34%"></i></div><b>34%</b></div>
+          <div class="minirow"><span>FRONTIER</span><div class="bar" style="color:var(--amber)"><i style="width:12%"></i></div><b>12%</b></div>
+        </div>
+        <div class="term" id="routerLog">
+          <div><span class="ts">15:54:21</span> <span class="tag">ROUTER</span> M2 evidence deficit → critic</div>
+          <div><span class="ts">15:54:18</span> <span class="good">PASS</span> held-out novelty gate</div>
+          <div><span class="ts">15:54:12</span> <span class="v">ESC</span> architecture conflict → Sol</div>
+          <div><span class="ts">15:54:04</span> <span class="tag">JEV</span> triage: micro decision / cheap path</div>
+          <div><span class="ts">15:53:59</span> <span class="good">PASS</span> deterministic checks 14/14</div>
+          <div><span class="ts">15:53:41</span> <span class="a">HOLD</span> source freshness &gt; 24h</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--amber)"></span><strong>EFFICIENCY / RESEARCH LOAD</strong><span class="grow"></span></div>
+        <div class="activity">
+          <div class="metric"><span>THROUGHPUT</span><b class="ok" id="throughput">128/h</b><small>hypothesis ops</small></div>
+          <div class="metric"><span>REJECT RATE</span><b id="rejectRate">72.4%</b><small>selection pressure</small></div>
+          <div class="metric"><span>MEAN DEPTH</span><b>7.8</b><small>cross-field hops</small></div>
+          <div class="metric"><span>COST / PASS</span><b>$0.031</b><small>simulated</small></div>
+        </div>
+        <div class="term">
+          <div><span class="good">▲</span> evidence reuse +18.2%</div>
+          <div><span class="good">▲</span> critic hit-rate +6.4%</div>
+          <div><span class="bad">▼</span> redundant branches -31</div>
+          <div><span class="tag">∴</span> HOF concentration 0.084</div>
+          <div><span class="v">∿</span> lineage entropy 2.941</div>
+        </div>
+      </section>
+    </aside>
+
+    <section class="col center">
+      <section class="mainviz">
+        <canvas id="graph"></canvas>
+        <div class="scan"></div>
+        <div class="viztitle"><small>LIVE CROSS-DOMAIN MAP // 3D PROJECTION</small><h1>RESEARCH FIELD / SIGNAL TOPOLOGY</h1></div>
+        <div class="vizmeta">
+          <div class="badge">NODES <b id="nodeCount">184</b></div>
+          <div class="badge">EDGES <b id="edgeCount">326</b></div>
+          <div class="badge">BRIDGES <b id="bridgeCount">18</b></div>
+          <div class="badge">NOVELTY <b class="ok">0.81</b></div>
+        </div>
+        <div class="legend"><span style="color:var(--cyan)">AI SAFETY</span><span style="color:var(--green)">BIOLOGY</span><span style="color:var(--amber)">ECON</span><span style="color:var(--violet)">ROBOTICS</span><span style="color:var(--blue)">MATH</span></div>
+        <aside class="nodecard" id="nodecard">
+          <div class="ey">SELECTED / CONSTELLATION</div>
+          <h3 id="selName">HALL OF FAME CORE</h3>
+          <p id="selDesc">検証を生き残った原理・発見・血統が集まる中心核。</p>
+          <div class="nodegrid"><div><span>ACTIVE</span><b id="n1">128</b></div><div><span>HYP</span><b id="n2">34</b></div><div><span>EXP</span><b id="n3">12</b></div><div><span>HOF</span><b id="n4">9</b></div></div>
+        </aside>
+      </section>
+
+      <section class="middle">
+        <section class="panel">
+          <div class="hd"><span class="dot" style="background:var(--cyan)"></span><strong>CROSS-DOMAIN DIVERGENCE</strong><span class="grow"></span><span class="count">LIVE</span></div>
+          <div class="chartbox">
+            <div class="chartline"><canvas id="chartA"></canvas></div>
+            <div class="statrow">
+              <div class="stat"><span>MEAN</span><b>0.392</b></div><div class="stat"><span>MAX</span><b class="ok">0.871</b></div><div class="stat"><span>BRIDGE</span><b>18</b></div><div class="stat"><span>ALERT</span><b class="warn">3</b></div>
+            </div>
+            <div class="pressures">
+              <div class="pressure"><span>Safety↔Bio</span><div class="track"><div class="fill" style="width:86%;color:var(--cyan);background:currentColor"></div></div><b class="ok">0.86</b></div>
+              <div class="pressure"><span>Math↔Lang</span><div class="track"><div class="fill" style="width:64%;color:var(--violet);background:currentColor"></div></div><b>0.64</b></div>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="hd"><span class="dot" style="background:var(--green)"></span><strong>EVIDENCE MATRIX</strong><span class="grow"></span><span class="count">SOURCE GATE</span></div>
+          <div class="pad">
+            <div class="matrix">
+              <div></div><div>FRESH</div><div>PRIMARY</div><div>DISSENT</div><div>REPL.</div>
+              <div class="lab">HYP-241</div><div class="hi">0.94</div><div class="hi">YES</div><div class="mid">2</div><div class="hi">3</div>
+              <div class="lab">HYP-237</div><div class="hi">0.88</div><div class="mid">PART</div><div class="hi">4</div><div class="mid">1</div>
+              <div class="lab">HYP-229</div><div class="mid">0.62</div><div class="hi">YES</div><div class="lo">0</div><div class="mid">1</div>
+              <div class="lab">HYP-221</div><div class="lo">0.39</div><div class="mid">PART</div><div class="hi">5</div><div class="lo">0</div>
+              <div class="lab">HYP-219</div><div class="hi">0.91</div><div class="hi">YES</div><div class="mid">2</div><div class="hi">2</div>
+            </div>
+            <div class="term" style="padding-left:0">
+              <div><span class="tag">gate:</span> meaningful dissent required</div>
+              <div><span class="good">pass:</span> independent critic present</div>
+              <div><span class="a">hold:</span> replication debt = 2</div>
+            </div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="hd"><span class="dot" style="background:var(--red)"></span><strong>HYPOTHESIS PRESSURE</strong><span class="grow"></span><span class="count">SELECT / KILL</span></div>
+          <div class="pressures" id="pressures">
+            <div class="pressure"><span>Novelty</span><div class="track"><div class="fill" style="width:82%;background:var(--green)"></div></div><b>82</b></div>
+            <div class="pressure"><span>Evidence</span><div class="track"><div class="fill" style="width:71%;background:var(--cyan)"></div></div><b>71</b></div>
+            <div class="pressure"><span>Utility</span><div class="track"><div class="fill" style="width:64%;background:var(--amber)"></div></div><b>64</b></div>
+            <div class="pressure"><span>Survival</span><div class="track"><div class="fill" style="width:37%;background:var(--violet)"></div></div><b>37</b></div>
+            <div class="pressure"><span>Contrad.</span><div class="track"><div class="fill" style="width:29%;background:var(--red)"></div></div><b>29</b></div>
+          </div>
+          <div class="term">
+            <div><span class="good">KEEP</span> HYP-241 adaptive oversight</div>
+            <div><span class="a">HOLD</span> HYP-237 sparse evidence</div>
+            <div><span class="bad">KILL</span> HYP-221 duplicate ancestry</div>
+          </div>
+        </section>
+      </section>
+
+      <section class="commandzone">
+        <div class="cli">
+          <div class="cliout" id="cliout">
+            <div><span class="sys">[15:55:01]</span> boot research topology renderer ... <span class="ret">OK</span></div>
+            <div><span class="sys">[15:55:02]</span> loaded 42 specialists / 7 expert cells</div>
+            <div><span class="sys">[15:55:03]</span> evidence gate / held-out critic / lineage tracker <span class="ret">READY</span></div>
+            <div><span class="sys">[15:55:04]</span> waiting for collision command</div>
+          </div>
+          <form class="prompt" id="command"><span>polymath&gt;</span><input id="cmdInput" autocomplete="off" value="collide ai-safety biology --novelty high --micro-test"><button>RUN ↵</button></form>
+        </div>
+        <div class="activity">
+          <div class="metric"><span>LAST RUN</span><b class="ok">PASS</b><small>14 deterministic checks</small></div>
+          <div class="metric"><span>QUEUE</span><b id="queue">17</b><small>3 high-priority</small></div>
+          <div class="metric"><span>HOF TODAY</span><b>+2</b><small>1 revived</small></div>
+          <div class="metric"><span>BOUNDARY</span><b class="warn">1</b><small>requires human judgment</small></div>
+        </div>
+      </section>
+    </section>
+
+    <aside class="col right">
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--violet)"></span><strong>KODOKU / SURVIVORS</strong><span class="grow"></span><span class="count">GEN 1842</span></div>
+        <div class="survivor"><div class="top"><b>FIRST CASH RECEIPT</b><em class="ok">91.4</em></div><div class="rail"><i class="s1" style="width:52%"></i><i class="s2" style="width:25%"></i><i class="s3" style="width:18%"></i><i class="s4" style="width:5%"></i></div></div>
+        <div class="survivor"><div class="top"><b>AGENT EVIDENCE</b><em>87.9</em></div><div class="rail"><i class="s1" style="width:42%"></i><i class="s2" style="width:31%"></i><i class="s3" style="width:20%"></i><i class="s4" style="width:7%"></i></div></div>
+        <div class="survivor"><div class="top"><b>SMB RISK SCANNER</b><em>84.1</em></div><div class="rail"><i class="s1" style="width:38%"></i><i class="s2" style="width:29%"></i><i class="s3" style="width:25%"></i><i class="s4" style="width:8%"></i></div></div>
+        <div class="survivor"><div class="top"><b>VERTICAL OPS</b><em>81.7</em></div><div class="rail"><i class="s1" style="width:34%"></i><i class="s2" style="width:33%"></i><i class="s3" style="width:25%"></i><i class="s4" style="width:8%"></i></div></div>
+        <div class="term">
+          <div><span class="tag">population</span> 512 / generation</div>
+          <div><span class="good">survived</span> 19 / 512</div>
+          <div><span class="bad">killed</span> 493 / 512</div>
+          <div><span class="v">mutation</span> adaptive / ancestry-aware</div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--green)"></span><strong>HALL OF FAME</strong><span class="grow"></span><span class="count">9</span></div>
+        <div class="hof">
+          <div class="hofitem"><span class="rank">01</span><div><b>Evidence-based Escalation</b><small>routing / compute allocation</small></div><span class="score">94.8</span></div>
+          <div class="hofitem"><span class="rank">02</span><div><b>AFTERLIFE revival gate</b><small>reconsider / micro-test</small></div><span class="score">93.1</span></div>
+          <div class="hofitem"><span class="rank">03</span><div><b>Closed-loop agent scaling</b><small>evaluate / select / reinvest</small></div><span class="score">91.7</span></div>
+          <div class="hofitem"><span class="rank">04</span><div><b>Decision Genome</b><small>personal decision substrate</small></div><span class="score">88.9</span></div>
+          <div class="hofitem"><span class="rank">05</span><div><b>Evidence & Safety Case</b><small>pass / escalate / pause</small></div><span class="score">87.3</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--amber)"></span><strong>EXPERIMENTS / RUN QUEUE</strong><span class="grow"></span><span class="count">12 ACTIVE</span></div>
+        <div class="list">
+          <div class="row"><span class="ico">1</span><b>Safety × Evolution</b><em class="green">RUN</em></div>
+          <div class="row"><span class="ico">2</span><b>Agent criticism depth</b><em class="cyan">62%</em></div>
+          <div class="row"><span class="ico">3</span><b>Source freshness gate</b><em class="amber">HOLD</em></div>
+          <div class="row"><span class="ico">4</span><b>Cross-field novelty</b><em class="green">PASS</em></div>
+          <div class="row"><span class="ico">5</span><b>Lineage collapse test</b><em class="red">FAIL</em></div>
+          <div class="row"><span class="ico">6</span><b>Micro-test budget</b><em>Q</em></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="hd"><span class="dot" style="background:var(--cyan)"></span><strong>SOURCE / FRONTIER WATCH</strong><span class="grow"></span><span class="count">WORLDWIDE</span></div>
+        <div id="sources">
+          <div class="source"><div><b>arXiv / cs.AI</b><small>new preprints → expert intake</small></div><em class="ok">+18</em></div>
+          <div class="source"><div><b>Crossref / DOI</b><small>metadata validation</small></div><em>412</em></div>
+          <div class="source"><div><b>Official labs</b><small>primary announcements</small></div><em class="ok">LIVE</em></div>
+          <div class="source"><div><b>Safety cases</b><small>evidence packet refresh</small></div><em class="amber">3h</em></div>
+          <div class="source"><div><b>Robotics papers</b><small>embodiment frontier</small></div><em>+7</em></div>
+          <div class="source"><div><b>Biology / evo</b><small>cross-domain candidates</small></div><em class="ok">+11</em></div>
+        </div>
+        <div class="term">
+          <div><span class="tag">retrieved</span> 468 candidates</div>
+          <div><span class="good">validated</span> 193 primary/official</div>
+          <div><span class="a">queued</span> 71 for expert intake</div>
+          <div><span class="bad">dropped</span> 204 low-signal/duplicate</div>
+        </div>
+      </section>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <div class="fseg">VISUALIZATION MODE <span class="warn" style="margin-left:6px">LOCAL SIM</span></div>
+    <div class="fseg">FRAME <span id="fps" style="margin-left:6px;color:#9aa6ad">-- FPS</span></div>
+    <div class="ticker"><div class="ticker-track">
+      <b class="g">PASS HYP-241 independent critic</b>
+      <b class="c">BRIDGE AI Safety ↔ Biology 0.86</b>
+      <b class="a">HOLD HYP-237 source freshness debt</b>
+      <b class="r">KILL HYP-221 duplicate ancestry</b>
+      <b class="g">HOF +1 evidence-based escalation pattern</b>
+      <b class="c">KODOKU generation 1842 completed</b>
+    </div></div>
+    <div class="fseg">PRESS ENTER TO RUN COLLISION</div>
+  </footer>
 </div>
+<div class="flash" id="flash"></div>
+
 <script>
 (function(){
 "use strict";
-var canvas=document.getElementById("gl"),gl=canvas.getContext("webgl",{alpha:false,antialias:true,powerPreference:"high-performance",preserveDrawingBuffer:false});
-if(!gl){document.getElementById("loader").style.display="none";document.getElementById("fallback").style.display="block";return}
-var DPR=Math.min(window.devicePixelRatio||1,1.7),W=1,H=1,aspect=1;
-var mobile=matchMedia("(max-width:760px)").matches,reduce=matchMedia("(prefers-reduced-motion:reduce)").matches;
-var state={yaw:.18,pitch:-.06,zoom:mobile?1430:1040,targetZoom:mobile?1430:1040,drag:false,lastX:0,lastY:0,auto:!reduce,mode:"explore",selected:"core",collision:null};
-var touches=new Map(),pinch=0;
-var COLORS={core:[1,.73,.34],safety:[.25,.86,1],biology:[.32,1,.74],economics:[1,.62,.24],robotics:[.64,.38,1],math:[.30,.38,1],language:[1,.28,.78],systems:[.50,.64,1]};
-var DEF=[
-{id:"safety",name:"AI Safety",c:COLORS.safety,p:[-300,-145,35],n:31,desc:"整合性・評価・安全な自律性。失敗ケースと反証から更新する。"},
-{id:"biology",name:"Biology",c:COLORS.biology,p:[292,-155,-55],n:27,desc:"進化・生態・適応。生物の探索原理を人工系へ移植する。"},
-{id:"economics",name:"Economics",c:COLORS.economics,p:[-332,104,-92],n:23,desc:"市場・制度・インセンティブ。現実の選択圧をモデル化する。"},
-{id:"robotics",name:"Robotics",c:COLORS.robotics,p:[320,108,78],n:25,desc:"身体性・制御・環境相互作用。現実世界で検証する。"},
-{id:"math",name:"Math",c:COLORS.math,p:[-170,276,72],n:27,desc:"形式化・最適化・証明。曖昧な発見を構造へ落とす。"},
-{id:"language",name:"Language",c:COLORS.language,p:[188,270,-52],n:24,desc:"言語・意味・知識表現。概念間の翻訳と圧縮を担う。"},
-{id:"systems",name:"Systems",c:COLORS.systems,p:[0,-306,116],n:21,desc:"エージェント基盤・評価器・運用ループ。研究所そのものを改善する。"}
+var c=document.getElementById("graph"),x=c.getContext("2d"),D=Math.min(devicePixelRatio||1,1.5),W=0,H=0;
+var S={yaw:.18,pitch:-.10,zoom:760,tzoom:760,drag:false,x:0,y:0,auto:true,selected:"core",collisionUntil:0};
+var cols={core:"#ffd37e",safety:"#63e6ff",bio:"#78ffb0",econ:"#ffc66d",robot:"#b38cff",math:"#6fa3ff",lang:"#ff83c6",systems:"#89a8ff"};
+var defs=[
+{id:"safety",name:"AI SAFETY",c:cols.safety,p:[-235,-110,20],n:27,desc:"alignment / evaluation / autonomous safety"},
+{id:"bio",name:"BIOLOGY",c:cols.bio,p:[235,-120,-30],n:25,desc:"evolution / ecology / adaptation"},
+{id:"econ",name:"ECONOMICS",c:cols.econ,p:[-280,80,-70],n:20,desc:"markets / incentives / institutional pressure"},
+{id:"robot",name:"ROBOTICS",c:cols.robot,p:[285,90,65],n:22,desc:"control / embodiment / environment"},
+{id:"math",name:"MATH",c:cols.math,p:[-135,220,60],n:24,desc:"formalization / optimization / proof"},
+{id:"lang",name:"LANGUAGE",c:cols.lang,p:[155,215,-55],n:21,desc:"meaning / symbols / representation"},
+{id:"systems",name:"SYSTEMS",c:cols.systems,p:[0,-250,115],n:18,desc:"agents / evaluators / closed loops"}
 ];
-var centers={core:{id:"core",name:"HALL OF FAME",p:[0,0,0],c:COLORS.core,desc:"検証を生き残った発見・運用原理・血統が集まる中心核。"}};
-DEF.forEach(function(d){centers[d.id]=d});
-
-var VS_POINT="attribute vec3 aPos;attribute vec3 aColor;attribute float aSize;uniform float uYaw;uniform float uPitch;uniform float uZoom;uniform float uAspect;uniform float uFov;uniform float uDpr;uniform float uSizeMul;varying vec3 vColor;varying float vDepth;void main(){float cy=cos(uYaw),sy=sin(uYaw),cp=cos(uPitch),sp=sin(uPitch);vec3 p=vec3(cy*aPos.x+sy*aPos.z,aPos.y,-sy*aPos.x+cy*aPos.z);p=vec3(p.x,cp*p.y-sp*p.z,sp*p.y+cp*p.z);float vz=p.z-uZoom;float f=1.0/tan(uFov*.5);gl_Position=vec4(p.x*f/uAspect,p.y*f,-1.0005*vz-2.001,-vz);float z=max(120.0,-vz);gl_PointSize=min(110.0,aSize*uSizeMul*uDpr*(850.0/z));vColor=aColor;vDepth=z;}";
-var FS_POINT="precision mediump float;varying vec3 vColor;uniform float uAlpha;uniform float uGlow;void main(){vec2 q=gl_PointCoord-.5;float r=length(q)*2.0;if(r>1.0)discard;float core=smoothstep(.33,0.0,r);float halo=pow(max(0.0,1.0-r),uGlow);float a=(core*.78+halo*.72)*uAlpha;gl_FragColor=vec4(vColor*a,a);}";
-var VS_LINE="attribute vec3 aPos;attribute vec3 aColor;uniform float uYaw;uniform float uPitch;uniform float uZoom;uniform float uAspect;uniform float uFov;varying vec3 vColor;void main(){float cy=cos(uYaw),sy=sin(uYaw),cp=cos(uPitch),sp=sin(uPitch);vec3 p=vec3(cy*aPos.x+sy*aPos.z,aPos.y,-sy*aPos.x+cy*aPos.z);p=vec3(p.x,cp*p.y-sp*p.z,sp*p.y+cp*p.z);float vz=p.z-uZoom;float f=1.0/tan(uFov*.5);gl_Position=vec4(p.x*f/uAspect,p.y*f,-1.0005*vz-2.001,-vz);vColor=aColor;}";
-var FS_LINE="precision mediump float;varying vec3 vColor;uniform float uAlpha;void main(){gl_FragColor=vec4(vColor*uAlpha,uAlpha);}";
-
-function shader(type,src){var s=gl.createShader(type);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw new Error(gl.getShaderInfoLog(s));return s}
-function program(vs,fs){var p=gl.createProgram();gl.attachShader(p,shader(gl.VERTEX_SHADER,vs));gl.attachShader(p,shader(gl.FRAGMENT_SHADER,fs));gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw new Error(gl.getProgramInfoLog(p));return p}
-var PP=program(VS_POINT,FS_POINT),LP=program(VS_LINE,FS_LINE);
-function locs(p,isPoint){return{p:gl.getAttribLocation(p,"aPos"),c:gl.getAttribLocation(p,"aColor"),s:isPoint?gl.getAttribLocation(p,"aSize"):-1,y:gl.getUniformLocation(p,"uYaw"),x:gl.getUniformLocation(p,"uPitch"),z:gl.getUniformLocation(p,"uZoom"),a:gl.getUniformLocation(p,"uAspect"),f:gl.getUniformLocation(p,"uFov"),d:isPoint?gl.getUniformLocation(p,"uDpr"):null,m:isPoint?gl.getUniformLocation(p,"uSizeMul"):null,o:gl.getUniformLocation(p,"uAlpha"),g:isPoint?gl.getUniformLocation(p,"uGlow"):null}}
-var PL=locs(PP,true),LL=locs(LP,false);
-
-function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;var t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
-function pushP(A,C,S,p,c,s){A.push(p[0],p[1],p[2]);C.push(c[0],c[1],c[2]);S.push(s)}
-function pushL(A,C,a,b,c){A.push(a[0],a[1],a[2],b[0],b[1],b[2]);C.push(c[0],c[1],c[2],c[0],c[1],c[2])}
-function makeSet(P,C,S,L,LC){return{p:new Float32Array(P),c:new Float32Array(C),s:new Float32Array(S),l:new Float32Array(L),lc:new Float32Array(LC)}}
-function buildUniverse(){
- var P=[],C=[],S=[],L=[],LC=[],r0=rng(81);
- for(var i=0;i<480;i++){var rr=760+r0()*1800,th=r0()*Math.PI*2,ph=Math.acos(2*r0()-1);pushP(P,C,S,[Math.sin(ph)*Math.cos(th)*rr,Math.sin(ph)*Math.sin(th)*rr*.72,Math.cos(ph)*rr],[.25+r0()*.35,.35+r0()*.35,.55+r0()*.35],1+r0()*1.8)}
- pushP(P,C,S,[0,0,0],COLORS.core,38);
- for(i=0;i<3;i++){var ring=74+i*18,prev=null;for(var k=0;k<=72;k++){var aa=k/72*Math.PI*2,p=[Math.cos(aa)*ring,Math.sin(aa)*ring*.38,Math.sin(aa+i*.9)*ring*.28];if(prev)pushL(L,LC,prev,p,i===1?COLORS.robotics:COLORS.core);prev=p}}
- DEF.forEach(function(d,di){var r=rng(1200+di*41),nodes=[];pushP(P,C,S,d.p,d.c,19);for(var j=0;j<d.n;j++){var a=r()*Math.PI*2,b=(r()-.5)*1.45,q=28+Math.pow(r(),.72)*91,p=[d.p[0]+Math.cos(a)*Math.cos(b)*q,d.p[1]+Math.sin(b)*q*.75,d.p[2]+Math.sin(a)*Math.cos(b)*q];nodes.push(p);pushP(P,C,S,p,d.c,j<2?8:3+r()*3);pushL(L,LC,p,j<4?d.p:nodes[Math.floor(r()*nodes.length)],d.c);if(r()>.55&&nodes.length>2)pushL(L,LC,p,nodes[Math.floor(r()*nodes.length)],d.c)}});
- var links=[["core","safety"],["core","biology"],["core","economics"],["core","robotics"],["core","math"],["core","language"],["core","systems"],["safety","biology"],["biology","robotics"],["math","safety"],["systems","economics"],["language","systems"],["robotics","math"],["language","biology"],["economics","safety"]];
- links.forEach(function(q,idx){var a=centers[q[0]].p,b=centers[q[1]].p,col=idx<7?centers[q[1]].c:[.55,.7,1],prev=a;for(var j=1;j<=22;j++){var t=j/22,mid=[(a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5+(idx>=7?95:35)],u=1-t,p=[(u*u*a[0]+2*u*t*mid[0]+t*t*b[0]),(u*u*a[1]+2*u*t*mid[1]+t*t*b[1]),(u*u*a[2]+2*u*t*mid[2]+t*t*b[2])];pushL(L,LC,prev,p,col);prev=p}});
- return makeSet(P,C,S,L,LC)
+var nodes=[],edges=[],clusters={core:{id:"core",name:"HALL OF FAME CORE",c:cols.core,p:[0,0,0],desc:"検証を生き残った原理・発見・血統が集まる中心核。"}};
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+defs.forEach(function(d,di){clusters[d.id]=d;var r=rng(100+di*31),base=nodes.length;nodes.push({g:d.id,p:d.p,c:d.c,s:6.5,head:true});for(var i=0;i<d.n;i++){var a=r()*Math.PI*2,b=(r()-.5)*1.4,q=28+Math.pow(r(),.72)*72,p=[d.p[0]+Math.cos(a)*Math.cos(b)*q,d.p[1]+Math.sin(b)*q*.72,d.p[2]+Math.sin(a)*Math.cos(b)*q];nodes.push({g:d.id,p:p,c:d.c,s:1.4+r()*1.9});var j=base+Math.floor(r()*(i+1));edges.push([nodes.length-1,Math.max(base,j),d.c,.15]);if(r()>.56&&i>3)edges.push([nodes.length-1,base+1+Math.floor(r()*i),d.c,.08])}});
+nodes.push({g:"core",p:[0,0,0],c:cols.core,s:11,head:true});var coreIndex=nodes.length-1;
+defs.forEach(function(d){var i=nodes.findIndex(function(n){return n.g===d.id&&n.head});edges.push([coreIndex,i,d.c,.22])});
+[["safety","bio"],["bio","robot"],["math","safety"],["systems","econ"],["lang","systems"],["robot","math"],["lang","bio"],["econ","safety"]].forEach(function(q){var a=nodes.findIndex(function(n){return n.g===q[0]&&n.head}),b=nodes.findIndex(function(n){return n.g===q[1]&&n.head});edges.push([a,b,"#8fa9bd",.11])});
+var stars=[],R=rng(44);for(var i=0;i<300;i++)stars.push({p:[(R()-.5)*1300,(R()-.5)*850,(R()-.5)*1100],s:.3+R()*1.2,a:.1+R()*.28});
+function resize(){W=c.clientWidth;H=c.clientHeight;c.width=Math.round(W*D);c.height=Math.round(H*D);x.setTransform(D,0,0,D,0,0)}addEventListener("resize",resize);resize();
+function rot(p){var cy=Math.cos(S.yaw),sy=Math.sin(S.yaw),cp=Math.cos(S.pitch),sp=Math.sin(S.pitch),xx=cy*p[0]-sy*p[2],zz=sy*p[0]+cy*p[2],yy=cp*p[1]-sp*zz;zz=sp*p[1]+cp*zz;return[xx,yy,zz]}
+function proj(p){var q=rot(p),z=S.zoom+q[2],sc=680/Math.max(150,z+620);return{x:W*.5+q[0]*sc,y:H*.52+q[1]*sc,z:q[2],s:sc}}
+function hex(h,a){var v=h.replace("#",""),n=parseInt(v,16),r=n>>16,g=n>>8&255,b=n&255;return"rgba("+r+","+g+","+b+","+a+")"}
+function bg(){x.fillStyle="#040607";x.fillRect(0,0,W,H);var g=x.createRadialGradient(W*.5,H*.48,0,W*.5,H*.48,Math.max(W,H)*.68);g.addColorStop(0,"rgba(18,33,41,.30)");g.addColorStop(.42,"rgba(4,9,12,.12)");g.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=g;x.fillRect(0,0,W,H)}
+function draw(t){
+ requestAnimationFrame(draw);S.zoom+=(S.tzoom-S.zoom)*.075;if(S.auto&&!S.drag)S.yaw+=.0006;bg();
+ x.save();x.globalCompositeOperation="lighter";
+ stars.forEach(function(s){var p=proj(s.p);x.globalAlpha=s.a*Math.max(.35,p.s);x.fillStyle="#9fb7c6";x.fillRect(p.x,p.y,s.s*p.s,s.s*p.s)});
+ edges.forEach(function(e,idx){var a=proj(nodes[e[0]].p),b=proj(nodes[e[1]].p),boost=t<S.collisionUntil&&idx%5===0?2.6:1;x.strokeStyle=hex(e[2],e[3]*boost);x.lineWidth=.45;x.beginPath();x.moveTo(a.x,a.y);var mx=(a.x+b.x)/2,my=(a.y+b.y)/2-12*Math.sin(idx*.8);x.quadraticCurveTo(mx,my,b.x,b.y);x.stroke()});
+ var order=nodes.map(function(n,i){return{n:n,i:i,p:proj(n.p)}}).sort(function(a,b){return a.p.z-b.p.z});
+ order.forEach(function(o){var n=o.n,p=o.p,sel=S.selected===n.g,rr=n.s*p.s*(sel?1.3:1),gr=x.createRadialGradient(p.x,p.y,0,p.x,p.y,rr*4.6);gr.addColorStop(0,hex(n.c,.9));gr.addColorStop(.2,hex(n.c,.5));gr.addColorStop(1,hex(n.c,0));x.fillStyle=gr;x.beginPath();x.arc(p.x,p.y,rr*4.6,0,Math.PI*2);x.fill();x.fillStyle=n.c;x.globalAlpha=n.head?1:.78;x.beginPath();x.arc(p.x,p.y,Math.max(1,rr),0,Math.PI*2);x.fill();if(n.head){x.strokeStyle=hex(n.c,.35);x.globalAlpha=.7;x.beginPath();x.arc(p.x,p.y,rr*2.8+Math.sin(t*.003+o.i)*1.5,0,Math.PI*2);x.stroke()}n.hit={x:p.x,y:p.y,r:Math.max(9,rr*3)}});
+ x.restore();
+ x.save();x.font="600 9px "+getComputedStyle(document.body).fontFamily;x.textAlign="center";x.textBaseline="middle";Object.keys(clusters).forEach(function(id){var d=clusters[id],p=proj(d.p);if(p.x<0||p.x>W||p.y<0||p.y>H)return;x.fillStyle=id==="core"?"#f5dfb7":"#aab5ba";x.globalAlpha=.8;x.fillText(d.name,p.x,p.y+(id==="core"?24:-17))});x.restore();
+ if(t<S.collisionUntil){var a=proj(clusters.safety.p),b=proj(clusters.bio.p),q=1-(S.collisionUntil-t)/2200;q=Math.max(0,Math.min(1,q));for(var k=0;k<18;k++){var tt=(q+k/18*.45)%1,xx=a.x+(b.x-a.x)*tt,yy=a.y+(b.y-a.y)*tt-35*Math.sin(tt*Math.PI);x.fillStyle=k%2?cols.safety:cols.bio;x.globalAlpha=.8;x.beginPath();x.arc(xx,yy,1.5+(k%4===0?2:0),0,Math.PI*2);x.fill()}}
 }
-function buildEvolution(){
- var P=[],C=[],S=[],L=[],LC=[],levels=7,rows=[];
- for(var l=0;l<levels;l++){var count=1+l*2,row=[];for(var i=0;i<count;i++){var p=[(i-(count-1)/2)*58,(l-3)*96,Math.sin(i*2.07+l)*75-70],col=l===levels-1?COLORS.core:COLORS.systems;pushP(P,C,S,p,col,l===levels-1?12:6);row.push(p);if(l){var pr=rows[l-1],pa=pr[Math.min(pr.length-1,Math.floor(i/1.5))];pushL(L,LC,pa,p,[.36,.52,1])}}rows.push(row)}
- for(var g=0;g<220;g++){var r=rng(600+g),z=-600-r()*900;pushP(P,C,S,[(r()-.5)*1200,(r()-.5)*850,z],[.25,.4,.8],1.2)}
- return makeSet(P,C,S,L,LC)
-}
-function buildExperiments(){
- var P=[],C=[],S=[],L=[],LC=[];DEF.slice(0,5).forEach(function(d,idx){var r=68+idx*10,prev=null;for(var k=0;k<=80;k++){var a=k/80*Math.PI*2,p=[d.p[0]+Math.cos(a)*r,d.p[1]+Math.sin(a)*r*.45,d.p[2]+Math.sin(a*2+idx)*35];pushP(P,C,S,p,d.c,k%10===0?5:2);if(prev)pushL(L,LC,prev,p,d.c);prev=p}});return makeSet(P,C,S,L,LC)
-}
-function buildDiscoveries(){
- var P=[],C=[],S=[],L=[],LC=[];pushP(P,C,S,[0,0,0],COLORS.core,34);for(var i=0;i<9;i++){var a=i/9*Math.PI*2,r=105+(i%3)*32,p=[Math.cos(a)*r,Math.sin(a)*r*.58,Math.sin(a*1.7)*58];pushP(P,C,S,p,COLORS.core,11);pushL(L,LC,[0,0,0],p,COLORS.core)}return makeSet(P,C,S,L,LC)
-}
-var sets={explore:buildUniverse(),hypotheses:null,experiments:buildExperiments(),evolution:buildEvolution(),discoveries:buildDiscoveries()};sets.hypotheses=sets.explore;
-function buffers(set){function b(data){var x=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,x);gl.bufferData(gl.ARRAY_BUFFER,data,gl.STATIC_DRAW);return x}set.pb=b(set.p);set.cb=b(set.c);set.sb=b(set.s);set.lb=b(set.l);set.lcb=b(set.lc);set.pc=set.p.length/3;set.lcCount=set.l.length/3}
-Object.keys(sets).forEach(function(k){if(k!=="hypotheses")buffers(sets[k])});
-sets.hypotheses=sets.explore;
-var dyn={p:new Float32Array(30*3),c:new Float32Array(30*3),s:new Float32Array(30),pb:gl.createBuffer(),cb:gl.createBuffer(),sb:gl.createBuffer(),pc:30};
-for(var di=0;di<30;di++){dyn.c.set(di%2?COLORS.safety:COLORS.biology,di*3);dyn.s[di]=di%6===0?9:5}
-gl.bindBuffer(gl.ARRAY_BUFFER,dyn.cb);gl.bufferData(gl.ARRAY_BUFFER,dyn.c,gl.STATIC_DRAW);gl.bindBuffer(gl.ARRAY_BUFFER,dyn.sb);gl.bufferData(gl.ARRAY_BUFFER,dyn.s,gl.STATIC_DRAW);
+requestAnimationFrame(draw);
+function pick(mx,my){var best=null,bd=999;nodes.forEach(function(n){if(!n.head||!n.hit)return;var d=Math.hypot(mx-n.hit.x,my-n.hit.y);if(d<n.hit.r&&d<bd){bd=d;best=n.g}});if(best)select(best)}
+function select(id){S.selected=id;var d=clusters[id]||clusters.core;document.getElementById("selName").textContent=d.name;document.getElementById("selDesc").textContent=d.desc;var seed=id==="core"?9:id.split("").reduce(function(a,c){return a+c.charCodeAt(0)},0);document.getElementById("n1").textContent=72+(seed*7)%81;document.getElementById("n2").textContent=9+(seed*5)%32;document.getElementById("n3").textContent=3+(seed*3)%15;document.getElementById("n4").textContent=id==="core"?9:1+seed%7}
+c.addEventListener("pointerdown",function(e){S.drag=true;S.auto=false;S.x=e.clientX;S.y=e.clientY;c.setPointerCapture(e.pointerId)});
+c.addEventListener("pointermove",function(e){if(!S.drag)return;var dx=e.clientX-S.x,dy=e.clientY-S.y;S.yaw+=dx*.005;S.pitch+=dy*.003;S.pitch=Math.max(-.85,Math.min(.85,S.pitch));S.x=e.clientX;S.y=e.clientY});
+c.addEventListener("pointerup",function(e){var moved=Math.hypot(e.clientX-S.x,e.clientY-S.y);S.drag=false;S.auto=true;if(moved<8){var r=c.getBoundingClientRect();pick(e.clientX-r.left,e.clientY-r.top)}});
+c.addEventListener("wheel",function(e){e.preventDefault();S.tzoom+=e.deltaY*.35;S.tzoom=Math.max(440,Math.min(1200,S.tzoom))},{passive:false});
 
-function attr(buf,loc,size){gl.bindBuffer(gl.ARRAY_BUFFER,buf);gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,size,gl.FLOAT,false,0,0)}
-function common(p,l){gl.uniform1f(l.y,state.yaw);gl.uniform1f(l.x,state.pitch);gl.uniform1f(l.z,state.zoom);gl.uniform1f(l.a,aspect);gl.uniform1f(l.f,mobile?.87:.80)}
-function drawPoints(set,mul,alpha,glow){gl.useProgram(PP);common(PP,PL);gl.uniform1f(PL.d,DPR);gl.uniform1f(PL.m,mul);gl.uniform1f(PL.o,alpha);gl.uniform1f(PL.g,glow);attr(set.pb,PL.p,3);attr(set.cb,PL.c,3);attr(set.sb,PL.s,1);gl.drawArrays(gl.POINTS,0,set.pc)}
-function drawDyn(mul,alpha){gl.useProgram(PP);common(PP,PL);gl.uniform1f(PL.d,DPR);gl.uniform1f(PL.m,mul);gl.uniform1f(PL.o,alpha);gl.uniform1f(PL.g,2.3);attr(dyn.pb,PL.p,3);attr(dyn.cb,PL.c,3);attr(dyn.sb,PL.s,1);gl.drawArrays(gl.POINTS,0,dyn.pc)}
-function drawLines(set,alpha){gl.useProgram(LP);common(LP,LL);gl.uniform1f(LL.o,alpha);attr(set.lb,LL.p,3);attr(set.lcb,LL.c,3);gl.drawArrays(gl.LINES,0,set.lcCount)}
-gl.enable(gl.BLEND);gl.blendFunc(gl.SRC_ALPHA,gl.ONE);gl.enable(gl.DEPTH_TEST);gl.depthFunc(gl.LEQUAL);gl.clearColor(.006,.012,.03,1);
+function lineChart(id,color){
+ var el=document.getElementById(id),cx=el.getContext("2d"),vals=Array.from({length:56},function(_,i){return .48+Math.sin(i*.42)*.13+Math.sin(i*.13)*.10+Math.random()*.06});function rs(){var w=el.clientWidth,h=el.clientHeight,dd=Math.min(devicePixelRatio||1,1.5);el.width=w*dd;el.height=h*dd;cx.setTransform(dd,0,0,dd,0,0);cx.clearRect(0,0,w,h);cx.strokeStyle="#182024";cx.lineWidth=1;for(var k=1;k<4;k++){cx.beginPath();cx.moveTo(0,h*k/4);cx.lineTo(w,h*k/4);cx.stroke()}cx.strokeStyle=color;cx.lineWidth=1.3;cx.beginPath();vals.forEach(function(v,i){var px=i/(vals.length-1)*w,py=h-(v*.74+.08)*h;if(i===0)cx.moveTo(px,py);else cx.lineTo(px,py)});cx.stroke()}addEventListener("resize",rs);rs();setInterval(function(){vals.shift();vals.push(Math.max(.08,Math.min(.94,vals[vals.length-1]+(Math.random()-.5)*.14)));rs()},900)}
+lineChart("chartA",cols.cyan);
 
-var labels=document.getElementById("labels"),labelEls={};
-function initLabels(){Object.keys(centers).forEach(function(id){var c=centers[id],e=document.createElement("div");e.className="label"+(id==="core"?" core":"");e.textContent=c.name;e.style.setProperty("--c",rgb(c.c));labels.appendChild(e);labelEls[id]=e})}initLabels();
-function rgb(c){return"rgb("+Math.round(c[0]*255)+","+Math.round(c[1]*255)+","+Math.round(c[2]*255)+")"}
-function rotPos(p){var cy=Math.cos(state.yaw),sy=Math.sin(state.yaw),cp=Math.cos(state.pitch),sp=Math.sin(state.pitch),x=cy*p[0]+sy*p[2],z=-sy*p[0]+cy*p[2],y=cp*p[1]-sp*z;z=sp*p[1]+cp*z;return[x,y,z]}
-function project(p){var q=rotPos(p),vz=q[2]-state.zoom,f=1/Math.tan((mobile?.87:.80)/2);if(vz>=-30)return null;var nx=(q[0]*f/aspect)/(-vz),ny=(q[1]*f)/(-vz);return{x:(nx*.5+.5)*W,y:(-.5*ny+.5)*H,z:-vz,vis:Math.abs(nx)<1.18&&Math.abs(ny)<1.18}}
-function placeLabels(){var show=state.mode==="explore"||state.mode==="hypotheses";Object.keys(labelEls).forEach(function(id){var e=labelEls[id];if(!show){e.style.opacity=0;return}var pr=project(centers[id].p);if(!pr||!pr.vis){e.style.opacity=0;return}e.style.opacity=mobile&&id!=="core"&&pr.z>1550?.45:.9;e.style.left=pr.x+"px";e.style.top=(pr.y+(id==="core"?36:0))+"px";e.style.transform="translate(-50%,-50%) scale("+Math.max(.78,Math.min(1.05,1150/pr.z)) +")"})}
-
-function resize(){W=innerWidth;H=innerHeight;aspect=W/H;DPR=Math.min(devicePixelRatio||1,mobile?1.35:1.7);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);canvas.style.width=W+"px";canvas.style.height=H+"px";gl.viewport(0,0,canvas.width,canvas.height)}addEventListener("resize",resize,{passive:true});resize();
-
-function render(t){
- requestAnimationFrame(render);state.zoom+=(state.targetZoom-state.zoom)*.09;if(state.auto&&!state.drag)state.yaw+=.00055;
- gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);var set=sets[state.mode];
- gl.disable(gl.DEPTH_TEST);drawLines(set,state.mode==="discoveries"?.22:.095);gl.enable(gl.DEPTH_TEST);
- drawPoints(set,4.4,state.mode==="discoveries"?.25:.12,2.1);drawPoints(set,1.2,.93,3.2);
- if(state.collision){updateCollision(t);drawDyn(4.8,.18);drawDyn(1.15,.96)}
- placeLabels()
-}requestAnimationFrame(render);
-
-function bez(a,b,t){var mid=[(a[0]+b[0])*.5,(a[1]+b[1])*.5,(a[2]+b[2])*.5+150],u=1-t;return[u*u*a[0]+2*u*t*mid[0]+t*t*b[0],u*u*a[1]+2*u*t*mid[1]+t*t*b[1],u*u*a[2]+2*u*t*mid[2]+t*t*b[2]]}
-function updateCollision(now){var c=state.collision,elapsed=(now-c.start)/2600;if(elapsed>=1){state.collision=null;document.getElementById("status").textContent="SYSTEM ONLINE";state.auto=!reduce;showToast("3 CANDIDATE BRIDGES","COMPLETE","選択圧による監督設計 / 共進化テスト / 適応的価値保持。次は証拠と反証へ。",4800);return}var a=centers.safety.p,b=centers.biology.p;for(var i=0;i<30;i++){var q=(elapsed*.9+i/30*.75)%1,p=bez(a,b,q),w=Math.sin(q*Math.PI)*16;dyn.p[i*3]=p[0]+Math.sin(i*2.1+elapsed*10)*w;dyn.p[i*3+1]=p[1]+Math.cos(i*1.7+elapsed*8)*w*.45;dyn.p[i*3+2]=p[2]+Math.sin(i*.9)*w*.35}gl.bindBuffer(gl.ARRAY_BUFFER,dyn.pb);gl.bufferData(gl.ARRAY_BUFFER,dyn.p,gl.DYNAMIC_DRAW)}
-function collide(){setMode("explore");if(state.collision)return;state.collision={start:performance.now()};state.auto=false;document.getElementById("status").textContent="COLLISION RUNNING";showToast("AI SAFETY × BIOLOGY","SEARCHING","遠い概念の間に新しい橋を探索しています。",2500)}
-
-function select(id,open){var c=centers[id]||centers.core;state.selected=id;document.getElementById("panelTitle").textContent=c.name;document.getElementById("chip").textContent=id==="core"?"CORE":"CONSTELLATION";document.getElementById("panelDesc").textContent=c.desc;var seed=id==="core"?9:id.split("").reduce(function(a,q){return a+q.charCodeAt(0)},0);document.getElementById("m1").textContent=74+(seed*7)%89;document.getElementById("m2").textContent=11+(seed*5)%31;document.getElementById("m3").textContent=4+(seed*3)%15;document.getElementById("m4").textContent=id==="core"?9:1+seed%7;if(open&&mobile)document.getElementById("panel").classList.add("open")}
-select("core",false);
-function pick(x,y){if(!(state.mode==="explore"||state.mode==="hypotheses"))return;var best=null,bd=32;Object.keys(centers).forEach(function(id){var p=project(centers[id].p);if(!p||!p.vis)return;var d=Math.hypot(x-p.x,y-p.y);if(d<bd){bd=d;best=id}});if(best)select(best,true)}
-
-function setMode(m){state.mode=m;document.querySelectorAll("#nav button").forEach(function(b){b.classList.toggle("on",b.dataset.mode===m)});var map={explore:["LIVE / 001","Knowledge<br>Universe","専門知・仮説・実験・失敗を、同じ空間で衝突させる。"],hypotheses:["FRONTIER / 034","Hypothesis<br>Field","異分野の境界に生まれた、まだ確定していない仮説。"],experiments:["ACTIVE / 012","Experiment<br>Orbits","仮説を現実へ落とし、測定・反証・更新する軌道。"],evolution:["KODOKU / 819K","Evolution<br>Lineage","変異・淘汰・血統を追跡し、生き残った構造だけを残す。"],discoveries:["HOF / 009","Verified<br>Discoveries","証拠と反証を通過したものだけを中心へ残す。"]},v=map[m];document.getElementById("modeIndex").textContent=v[0];document.getElementById("modeTitle").innerHTML=v[1];document.getElementById("modeCopy").textContent=v[2];if(m==="evolution"){state.targetZoom=mobile?1260:860;state.yaw=.12;state.pitch=-.05}else if(m==="discoveries"){state.targetZoom=mobile?980:650}else state.targetZoom=mobile?1430:1040;showToast(m==="evolution"?"KODOKU LINEAGE":m.toUpperCase()+" VIEW","ACTIVE",v[2],1300)}
-
-document.getElementById("nav").addEventListener("click",function(e){var b=e.target.closest("button[data-mode]");if(b)setMode(b.dataset.mode)});
-document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();collide()});
-document.getElementById("close").addEventListener("click",function(){document.getElementById("panel").classList.remove("open")});
-
-canvas.addEventListener("pointerdown",function(e){touches.set(e.pointerId,{x:e.clientX,y:e.clientY});canvas.setPointerCapture(e.pointerId);if(touches.size===1){state.drag=true;state.lastX=e.clientX;state.lastY=e.clientY;state.auto=false}else if(touches.size===2){var a=Array.from(touches.values());pinch=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)}});
-canvas.addEventListener("pointermove",function(e){if(!touches.has(e.pointerId))return;var old=touches.get(e.pointerId);touches.set(e.pointerId,{x:e.clientX,y:e.clientY});if(touches.size===1&&state.drag){var dx=e.clientX-state.lastX,dy=e.clientY-state.lastY;state.yaw+=dx*.006;state.pitch+=dy*.004;state.pitch=Math.max(-1.05,Math.min(1.05,state.pitch));state.lastX=e.clientX;state.lastY=e.clientY}else if(touches.size===2){var a=Array.from(touches.values()),d=Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y);if(pinch){state.targetZoom-= (d-pinch)*2.2;state.targetZoom=Math.max(mobile?620:450,Math.min(mobile?2300:1800,state.targetZoom))}pinch=d}});
-canvas.addEventListener("pointerup",function(e){var start=touches.get(e.pointerId);touches.delete(e.pointerId);if(start&&Math.hypot(e.clientX-start.x,e.clientY-start.y)<7&&touches.size===0)pick(e.clientX,e.clientY);if(touches.size===0){state.drag=false;state.auto=!reduce}else if(touches.size===1){var a=Array.from(touches.values())[0];state.lastX=a.x;state.lastY=a.y}pinch=0});
-canvas.addEventListener("pointercancel",function(e){touches.delete(e.pointerId);if(!touches.size){state.drag=false;state.auto=!reduce}});
-canvas.addEventListener("wheel",function(e){e.preventDefault();state.targetZoom+=e.deltaY*.55;state.targetZoom=Math.max(450,Math.min(1800,state.targetZoom))},{passive:false});
-canvas.addEventListener("dblclick",function(){state.yaw=.18;state.pitch=-.06;state.targetZoom=mobile?1430:1040});
-
-function showToast(title,st,text,ms){var el=document.getElementById("toast");document.getElementById("toastTitle").textContent=title;document.getElementById("toastState").textContent=st;document.getElementById("toastText").textContent=text;el.classList.add("open");clearTimeout(showToast.t);showToast.t=setTimeout(function(){el.classList.remove("open")},ms||1800)}
-setTimeout(function(){document.getElementById("hint").style.opacity=".18"},6500);
-setTimeout(function(){document.getElementById("loader").classList.add("done")},220);
-setTimeout(function(){document.getElementById("loader").style.display="none"},800);
+var flash=document.getElementById("flash"),cli=document.getElementById("cliout");
+function addCli(text,cls){var d=document.createElement("div");d.innerHTML='<span class="sys">['+new Date().toLocaleTimeString("en-GB")+']</span> <span class="'+(cls||"")+'">'+text+"</span>";cli.appendChild(d);while(cli.children.length>6)cli.removeChild(cli.firstChild);cli.scrollTop=cli.scrollHeight}
+document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim();addCli("&gt; "+v,"cmd");addCli("dispatching specialist collision / evidence gate / novelty critic ...","warn");S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");setTimeout(function(){addCli("3 candidate bridges generated → 1 micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19},2200)});
+function clock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-GB")}clock();setInterval(clock,1000);
+var frame=0,last=performance.now();function fps(t){frame++;if(t-last>1000){document.getElementById("fps").textContent=Math.round(frame*1000/(t-last))+" FPS";frame=0;last=t}requestAnimationFrame(fps)}requestAnimationFrame(fps);
+setInterval(function(){document.getElementById("cycle").textContent="#"+(1842+Math.floor((Date.now()/9000)%19));document.getElementById("throughput").textContent=(122+Math.floor(Math.random()*15))+"/h";document.getElementById("rejectRate").textContent=(70+Math.random()*4).toFixed(1)+"%"},2800);
+select("core");
 })();
 </script>
 </body>
