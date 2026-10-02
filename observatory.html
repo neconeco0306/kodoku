@@ -67,6 +67,15 @@ button,input{font:inherit}
 .badge{border:1px solid #253037;background:rgba(6,10,12,.76);padding:4px 6px;color:#6f7b83;font-size:8px}.badge b{color:#c5cdd1;font-weight:600}
 .legend{position:absolute;left:10px;bottom:9px;display:flex;gap:9px;color:#5e6970;font-size:8px;pointer-events:none}
 .legend span:before{content:"";display:inline-block;width:5px;height:5px;background:currentColor;margin-right:4px}
+.refs{position:absolute;inset:0;pointer-events:none;font-size:7px;color:#6f7c83}
+.ref{position:absolute;border-left:1px solid currentColor;padding:2px 4px 2px 6px;background:rgba(4,7,8,.58);box-shadow:0 0 18px rgba(0,0,0,.18);white-space:nowrap;opacity:.72}
+.ref:after{content:"";position:absolute;left:-3px;top:50%;width:5px;height:5px;border:1px solid currentColor;transform:translateY(-50%) rotate(45deg);background:#050708}
+.ref.c{color:var(--cyan)}.ref.g{color:var(--green)}.ref.a{color:var(--amber)}.ref.v{color:var(--violet)}
+.ref.r1{left:18%;top:27%}.ref.r2{left:61%;top:22%}.ref.r3{left:37%;top:62%}.ref.r4{left:72%;top:54%}.ref.r5{left:27%;top:47%}.ref.r6{left:53%;top:38%}
+.extract{position:absolute;padding:3px 5px;border:1px solid currentColor;background:rgba(6,9,10,.66);font-size:8px;letter-spacing:.02em;opacity:.82;box-shadow:0 0 14px rgba(0,0,0,.25)}
+.extract.e1{left:31%;top:31%;color:var(--green)}.extract.e2{left:58%;top:64%;color:var(--cyan)}.extract.e3{left:43%;top:45%;color:var(--amber)}
+.refline{position:absolute;height:1px;transform-origin:0 50%;opacity:.22;background:linear-gradient(90deg,currentColor,transparent);pointer-events:none}
+.refline.l1{left:34%;top:34%;width:28%;color:var(--green);transform:rotate(19deg)}.refline.l2{left:48%;top:49%;width:25%;color:var(--cyan);transform:rotate(-31deg)}
 .nodecard{position:absolute;right:10px;bottom:10px;width:245px;background:rgba(7,9,11,.88);border:1px solid #293138;box-shadow:0 14px 40px rgba(0,0,0,.36);padding:8px 9px;pointer-events:none}
 .nodecard .ey{color:#64717a;font-size:7px;letter-spacing:.12em}.nodecard h3{margin:4px 0 3px;font-size:12px}.nodecard p{margin:0;color:#78848c;font-size:8px;line-height:1.5}
 .nodegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:7px}.nodegrid div{border-top:1px solid #20272b;padding-top:4px}.nodegrid span{display:block;color:#566168;font-size:6px}.nodegrid b{display:block;color:#d7dee1;margin-top:2px;font-size:10px;font-weight:500}
@@ -174,6 +183,18 @@ button,input{font:inherit}
           <div class="badge">NOVELTY <b class="ok">0.81</b></div>
         </div>
         <div class="legend"><span style="color:var(--cyan)">AI SAFETY</span><span style="color:var(--green)">BIOLOGY</span><span style="color:var(--amber)">ECON</span><span style="color:var(--violet)">ROBOTICS</span><span style="color:var(--blue)">MATH</span></div>
+        <div class="refs" aria-hidden="true">
+          <span class="ref c r1">arXiv:2609.04127 / EVAL</span>
+          <span class="ref g r2">DOI:10.1038/evo.1842</span>
+          <span class="ref a r3">SRC:PRIMARY / 0.94</span>
+          <span class="ref v r4">CRITIC:INDEPENDENT</span>
+          <span class="ref c r5">BRIDGE:SAFETY→BIO / .86</span>
+          <span class="ref g r6">LINEAGE:HYP-241→HOF</span>
+          <b class="extract e1">adaptive oversight</b>
+          <b class="extract e2">selection pressure</b>
+          <b class="extract e3">meaningful dissent</b>
+          <i class="refline l1"></i><i class="refline l2"></i>
+        </div>
         <aside class="nodecard" id="nodecard">
           <div class="ey">SELECTED / CONSTELLATION</div>
           <h3 id="selName">HALL OF FAME CORE</h3>
@@ -379,7 +400,7 @@ function addCli(text,cls){var d=document.createElement("div");d.innerHTML='<span
 document.getElementById("command").addEventListener("submit",function(e){e.preventDefault();var input=document.getElementById("cmdInput"),v=input.value.trim();addCli("&gt; "+v,"cmd");addCli("dispatching specialist collision / evidence gate / novelty critic ...","warn");S.collisionUntil=performance.now()+2200;flash.classList.remove("on");void flash.offsetWidth;flash.classList.add("on");setTimeout(function(){addCli("3 candidate bridges generated → 1 micro-test queued","ret");document.getElementById("queue").textContent=18;document.getElementById("bridgeCount").textContent=19},2200)});
 function clock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("en-GB")}clock();setInterval(clock,1000);
 var frame=0,last=performance.now();function fps(t){frame++;if(t-last>1000){document.getElementById("fps").textContent=Math.round(frame*1000/(t-last))+" FPS";frame=0;last=t}requestAnimationFrame(fps)}requestAnimationFrame(fps);
-setInterval(function(){document.getElementById("cycle").textContent="#"+(1842+Math.floor((Date.now()/9000)%19));document.getElementById("throughput").textContent=(122+Math.floor(Math.random()*15))+"/h";document.getElementById("rejectRate").textContent=(70+Math.random()*4).toFixed(1)+"%"},2800);
+setInterval(function(){document.getElementById("cycle").textContent="#"+(1842+Math.floor((Date.now()/9000)%19));document.getElementById("throughput").textContent=(122+Math.floor(Math.random()*15))+"/h";document.getElementById("rejectRate").textContent=(70+Math.random()*4).toFixed(1)+"%";document.querySelectorAll(".ref").forEach(function(el,i){el.style.opacity=(.48+Math.random()*.42).toFixed(2);if(i===4)el.textContent="BRIDGE:SAFETY→BIO / "+(.81+Math.random()*.08).toFixed(2)})},2800);
 select("core");
 })();
 </script>
