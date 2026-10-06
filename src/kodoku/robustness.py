@@ -121,7 +121,7 @@ def assess_candidate(
         )
     if len(seeds) < cfg.min_seeds:
         reasons.append(f"seeds {len(seeds)} < required {cfg.min_seeds}")
-    if adversarial_count < cfg.min_adversarial_observations:
+    if len(normalization_ids) != 1:\n        reasons.append(\n            f\"normalization schemes {len(normalization_ids)} != required 1\"\n        )\n    if adversarial_count < cfg.min_adversarial_observations:
         reasons.append(
             f"adversarial observations {adversarial_count} < required "
             f"{cfg.min_adversarial_observations}"
