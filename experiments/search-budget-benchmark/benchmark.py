@@ -156,8 +156,8 @@ def benchmark(label: str, evaluator_factory, n_bits: int, landscapes: range) -> 
 
 
 def main() -> None:
-    benchmark("rugged", rugged_evaluator, N_BITS_RUGGED, range(1, 21))
-    benchmark("smooth", smooth_evaluator, N_BITS_SMOOTH, range(1, 11))
+    benchmark("rugged", rugged_evaluator, N_BITS_RUGGED, range(1, 6))
+    benchmark("smooth", smooth_evaluator, N_BITS_SMOOTH, range(1, 6))
 
 
 if __name__ == "__main__":
