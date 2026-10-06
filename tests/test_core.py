@@ -106,6 +106,22 @@ class CoreSmokeTests(unittest.TestCase):
 
         self.assertNotEqual(first.final_population[0].id,second.final_population[0].id)
 
+    def test_hall_of_fame_does_not_repeat_same_survivor_across_generations(self):
+        seed=Candidate(text="stable candidate",id="stable-id")
+        result=evolve(
+            [seed],
+            evaluator=lambda candidate: 1.0,
+            config=EvolutionConfig(
+                generations=5,
+                population_size=1,
+                survivors=1,
+                hall_of_fame_size=10,
+                seed=11,
+            ),
+        )
+
+        self.assertEqual([x.id for x in result.hall_of_fame],["stable-id"])
+
     def test_invalid_config_fails_closed(self):
         with self.assertRaises(ValueError):
             EvolutionConfig(generations=0).validate()
