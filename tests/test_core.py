@@ -23,6 +23,65 @@ class CoreSmokeTests(unittest.TestCase):
             [(x.text,x.score) for x in second.hall_of_fame],
         )
 
+    def test_deterministic_ids_replay_full_lineage(self):
+        def score(candidate):
+            return float(len(set(candidate.text.split())))
+
+        config=EvolutionConfig(
+            generations=4,
+            population_size=6,
+            survivors=2,
+            seed=7,
+            deterministic_ids=True,
+        )
+        first=evolve(
+            [Candidate(text="alpha beta gamma"),Candidate(text="delta epsilon zeta")],
+            evaluator=score,
+            config=config,
+        )
+        second=evolve(
+            [Candidate(text="alpha beta gamma"),Candidate(text="delta epsilon zeta")],
+            evaluator=score,
+            config=config,
+        )
+
+        def snapshot(result):
+            return [
+                [(x.id,x.parent_id,x.text,x.score) for x in generation]
+                for generation in result.history
+            ]
+
+        self.assertEqual(snapshot(first),snapshot(second))
+
+    def test_deterministic_ids_change_with_run_seed(self):
+        def score(candidate):
+            return 1.0
+
+        first=evolve(
+            [Candidate(text="same seed")],
+            evaluator=score,
+            config=EvolutionConfig(
+                generations=1,
+                population_size=1,
+                survivors=1,
+                seed=1,
+                deterministic_ids=True,
+            ),
+        )
+        second=evolve(
+            [Candidate(text="same seed")],
+            evaluator=score,
+            config=EvolutionConfig(
+                generations=1,
+                population_size=1,
+                survivors=1,
+                seed=2,
+                deterministic_ids=True,
+            ),
+        )
+
+        self.assertNotEqual(first.final_population[0].id,second.final_population[0].id)
+
     def test_invalid_config_fails_closed(self):
         with self.assertRaises(ValueError):
             EvolutionConfig(generations=0).validate()
