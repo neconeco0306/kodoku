@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+from hashlib import blake2s
 from random import Random
 from typing import Callable, Iterable
 from uuid import uuid4
@@ -27,6 +28,7 @@ class EvolutionConfig:
     survivors: int = 4
     hall_of_fame_size: int = 20
     seed: int = 42
+    deterministic_ids: bool = False
 
     def validate(self) -> None:
         if self.generations < 1:
@@ -44,6 +46,37 @@ class EvolutionResult:
     final_population: list[Candidate]
     hall_of_fame: list[Candidate]
     history: list[list[Candidate]]
+
+
+def _stable_candidate_id(*parts: object) -> str:
+    payload = "\x1f".join(str(part) for part in parts).encode("utf-8")
+    return blake2s(payload, digest_size=10).hexdigest()
+
+
+def _with_deterministic_id(
+    candidate: Candidate,
+    *,
+    run_seed: int,
+    stage: str,
+    generation: int,
+    ordinal: int,
+    parent_id: str | None,
+) -> Candidate:
+    candidate_id = _stable_candidate_id(
+        run_seed,
+        stage,
+        generation,
+        ordinal,
+        parent_id or "",
+        candidate.text,
+    )
+    return replace(
+        candidate,
+        id=candidate_id,
+        parent_id=parent_id,
+        generation=generation,
+        score=None,
+    )
 
 
 def _default_mutator(candidate: Candidate, rng: Random) -> Candidate:
@@ -125,11 +158,34 @@ def evolve(
     if not initial:
         raise ValueError("at least one seed candidate is required")
 
+    if cfg.deterministic_ids:
+        initial = [
+            _with_deterministic_id(
+                candidate,
+                run_seed=cfg.seed,
+                stage="seed",
+                generation=0,
+                ordinal=index,
+                parent_id=candidate.parent_id,
+            )
+            for index, candidate in enumerate(initial)
+        ]
+
     population = initial[: cfg.population_size]
 
     while len(population) < cfg.population_size:
         parent = rng.choice(initial)
-        population.append(mutation(parent, rng))
+        child = mutation(parent, rng)
+        if cfg.deterministic_ids:
+            child = _with_deterministic_id(
+                child,
+                run_seed=cfg.seed,
+                stage="bootstrap",
+                generation=0,
+                ordinal=len(population),
+                parent_id=parent.id,
+            )
+        population.append(child)
 
     history: list[list[Candidate]] = []
     hall: list[Candidate] = []
@@ -150,6 +206,15 @@ def evolve(
             parent = rng.choice(survivors)
             child = mutation(parent, rng)
             child.generation = generation + 1
+            if cfg.deterministic_ids:
+                child = _with_deterministic_id(
+                    child,
+                    run_seed=cfg.seed,
+                    stage="generation",
+                    generation=generation + 1,
+                    ordinal=len(next_population),
+                    parent_id=parent.id,
+                )
             next_population.append(child)
 
         population = next_population
