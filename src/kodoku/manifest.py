@@ -52,6 +52,13 @@ class RunManifest:
             if not str(value).strip():
                 raise ValueError(f"{name} is required")
 
+        if not re.fullmatch(r"[0-9a-fA-F]{7,64}", self.code_revision):
+            raise ValueError("code_revision must be a commit-like hexadecimal revision")
+
+        runner = PurePosixPath(self.runner_path)
+        if runner.is_absolute() or ".." in runner.parts:
+            raise ValueError("runner_path must be a safe relative path")
+
         try:
             parsed = json.loads(self.config_json)
         except json.JSONDecodeError as exc:
