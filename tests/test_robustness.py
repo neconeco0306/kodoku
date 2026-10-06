@@ -14,6 +14,7 @@ def obs(
     score,
     *,
     adversarial=False,
+    normalization_id="rank-percentile-v1",
     candidate_id="candidate-a",
 ):
     return EvaluationObservation(
@@ -22,6 +23,7 @@ def obs(
         independence_group=group,
         seed=seed,
         normalized_score=score,
+        normalization_id=normalization_id,
         adversarial=adversarial,
     )
 
@@ -47,6 +49,7 @@ class RobustnessGateTests(unittest.TestCase):
         self.assertEqual(report.decision,"PROMOTE")
         self.assertEqual(report.independence_group_count,3)
         self.assertEqual(report.seed_count,3)
+        self.assertEqual(report.normalization_count,1)
 
     def test_large_disagreement_holds_candidate(self):
         report=assess_candidate([
