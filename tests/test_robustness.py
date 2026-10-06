@@ -60,6 +60,18 @@ class RobustnessGateTests(unittest.TestCase):
         self.assertEqual(report.decision,"HOLD")
         self.assertGreater(report.score_spread,RobustnessPolicy().max_score_spread)
 
+    def test_mixed_normalization_schemes_hold_candidate(self):
+        report=assess_candidate([
+            obs("a1","model-a",1,0.80),
+            obs("a2","model-a",2,0.77),
+            obs("b1","model-b",1,0.79),
+            obs("b2","model-b",3,0.75),
+            obs("c1","external",2,0.76,adversarial=True),
+            obs("c2","external",3,0.74,normalization_id="self-confidence-v1"),
+        ])
+        self.assertEqual(report.decision,"HOLD")
+        self.assertEqual(report.normalization_count,2)
+
     def test_mixed_candidate_ids_fail_closed(self):
         with self.assertRaises(ValueError):
             assess_candidate([
