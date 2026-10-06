@@ -50,7 +50,7 @@ class EvolutionResult:
 
 def _stable_candidate_id(*parts: object) -> str:
     payload = "\x1f".join(str(part) for part in parts).encode("utf-8")
-    return blake2s(payload, digest_size=6).hexdigest()
+    return blake2s(payload, digest_size=10).hexdigest()
 
 
 def _with_deterministic_id(
