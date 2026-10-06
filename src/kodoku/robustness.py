@@ -15,6 +15,7 @@ class EvaluationObservation:
     independence_group: str
     seed: int
     normalized_score: float
+    normalization_id: str
     adversarial: bool = False
 
     def validate(self) -> None:
@@ -24,6 +25,8 @@ class EvaluationObservation:
             raise ValueError("evaluator_id is required")
         if not self.independence_group.strip():
             raise ValueError("independence_group is required")
+        if not self.normalization_id.strip():
+            raise ValueError("normalization_id is required")
         if not 0.0 <= self.normalized_score <= 1.0:
             raise ValueError("normalized_score must be between 0 and 1")
 
@@ -65,6 +68,7 @@ class RobustnessReport:
     independence_group_count: int
     seed_count: int
     adversarial_count: int
+    normalization_count: int
     median_score: float | None
     floor_score: float | None
     score_spread: float | None
@@ -88,6 +92,7 @@ def assess_candidate(
             independence_group_count=0,
             seed_count=0,
             adversarial_count=0,
+            normalization_count=0,
             median_score=None,
             floor_score=None,
             score_spread=None,
@@ -103,8 +108,10 @@ def assess_candidate(
     candidate_id = items[0].candidate_id
     groups = {item.independence_group for item in items}
     seeds = {item.seed for item in items}
+    normalization_ids = {item.normalization_id for item in items}
     adversarial_count = sum(item.adversarial for item in items)
     scores = [item.normalized_score for item in items]
+
     med = float(median(scores))
     floor = min(scores)
     spread = max(scores) - min(scores)
@@ -121,7 +128,11 @@ def assess_candidate(
         )
     if len(seeds) < cfg.min_seeds:
         reasons.append(f"seeds {len(seeds)} < required {cfg.min_seeds}")
-    if len(normalization_ids) != 1:\n        reasons.append(\n            f\"normalization schemes {len(normalization_ids)} != required 1\"\n        )\n    if adversarial_count < cfg.min_adversarial_observations:
+    if len(normalization_ids) != 1:
+        reasons.append(
+            f"normalization schemes {len(normalization_ids)} != required 1"
+        )
+    if adversarial_count < cfg.min_adversarial_observations:
         reasons.append(
             f"adversarial observations {adversarial_count} < required "
             f"{cfg.min_adversarial_observations}"
@@ -147,6 +158,7 @@ def assess_candidate(
         independence_group_count=len(groups),
         seed_count=len(seeds),
         adversarial_count=adversarial_count,
+        normalization_count=len(normalization_ids),
         median_score=med,
         floor_score=floor,
         score_spread=spread,
