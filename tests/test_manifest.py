@@ -46,6 +46,30 @@ class RunManifestTests(unittest.TestCase):
         ])
         self.assertNotEqual(first,second)
 
+    def test_non_commit_revision_fails_closed(self):
+        with self.assertRaises(ValueError):
+            build_run_manifest(
+                code_revision="latest",
+                runner_path="runner.py",
+                config={"generations":10},
+                seed=1,
+                seeds=[Candidate(text="alpha")],
+                evaluator_id="eval-v1",
+                mutator_id="mut-v1",
+            )
+
+    def test_parent_traversal_runner_path_fails_closed(self):
+        with self.assertRaises(ValueError):
+            build_run_manifest(
+                code_revision="abcdef1",
+                runner_path="../runner.py",
+                config={"generations":10},
+                seed=1,
+                seeds=[Candidate(text="alpha")],
+                evaluator_id="eval-v1",
+                mutator_id="mut-v1",
+            )
+
     def test_missing_code_revision_fails_closed(self):
         with self.assertRaises(ValueError):
             build_run_manifest(
