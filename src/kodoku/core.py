@@ -128,14 +128,13 @@ def _rank(population: Iterable[Candidate]) -> list[Candidate]:
 
 
 def _dedupe(candidates: Iterable[Candidate]) -> list[Candidate]:
-    seen: set[tuple[str, str | None, int]] = set()
+    seen_ids: set[str] = set()
     output: list[Candidate] = []
 
     for candidate in candidates:
-        key = (candidate.text, candidate.parent_id, candidate.generation)
-        if key in seen:
+        if candidate.id in seen_ids:
             continue
-        seen.add(key)
+        seen_ids.add(candidate.id)
         output.append(candidate)
 
     return output
