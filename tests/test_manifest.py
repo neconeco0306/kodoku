@@ -7,7 +7,7 @@ from kodoku.manifest import build_run_manifest, fingerprint_seed_material
 class RunManifestTests(unittest.TestCase):
     def test_same_run_inputs_produce_same_fingerprint(self):
         kwargs=dict(
-            code_revision="abc123",
+            code_revision="abc1234",
             runner_path="experiments/example/run.py",
             config={"population_size":64,"generations":100},
             seed=7,
@@ -26,7 +26,7 @@ class RunManifestTests(unittest.TestCase):
 
     def test_evaluator_change_changes_run_fingerprint(self):
         base=dict(
-            code_revision="abc123",
+            code_revision="abc1234",
             runner_path="runner.py",
             config={"generations":10},
             seed=1,
@@ -45,6 +45,30 @@ class RunManifestTests(unittest.TestCase):
             Candidate(text="same",notes={"source":"b"}),
         ])
         self.assertNotEqual(first,second)
+
+    def test_non_commit_revision_fails_closed(self):
+        with self.assertRaises(ValueError):
+            build_run_manifest(
+                code_revision="latest",
+                runner_path="runner.py",
+                config={"generations":10},
+                seed=1,
+                seeds=[Candidate(text="alpha")],
+                evaluator_id="eval-v1",
+                mutator_id="mut-v1",
+            )
+
+    def test_parent_traversal_runner_path_fails_closed(self):
+        with self.assertRaises(ValueError):
+            build_run_manifest(
+                code_revision="abcdef1",
+                runner_path="../runner.py",
+                config={"generations":10},
+                seed=1,
+                seeds=[Candidate(text="alpha")],
+                evaluator_id="eval-v1",
+                mutator_id="mut-v1",
+            )
 
     def test_missing_code_revision_fails_closed(self):
         with self.assertRaises(ValueError):
