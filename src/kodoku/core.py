@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
 from hashlib import blake2s
+from math import isfinite
 from random import Random
 from typing import Callable, Iterable
 from uuid import uuid4
@@ -112,6 +113,10 @@ def _evaluate(
 
     for candidate in population:
         score = float(evaluator(candidate))
+        if not isfinite(score):
+            raise ValueError(
+                f"evaluator returned non-finite score for candidate {candidate.id}"
+            )
         evaluated.append(replace(candidate, score=score))
 
     return evaluated
