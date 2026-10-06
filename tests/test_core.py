@@ -23,6 +23,20 @@ class CoreSmokeTests(unittest.TestCase):
             [(x.text,x.score) for x in second.hall_of_fame],
         )
 
+    def test_nonfinite_evaluator_scores_fail_closed(self):
+        for invalid in (float("nan"),float("inf"),float("-inf")):
+            with self.subTest(score=invalid):
+                with self.assertRaises(ValueError):
+                    evolve(
+                        [Candidate(text="candidate")],
+                        evaluator=lambda candidate,value=invalid: value,
+                        config=EvolutionConfig(
+                            generations=1,
+                            population_size=1,
+                            survivors=1,
+                        ),
+                    )
+
     def test_invalid_config_fails_closed(self):
         with self.assertRaises(ValueError):
             EvolutionConfig(generations=0).validate()
