@@ -53,6 +53,30 @@ class CoreSmokeTests(unittest.TestCase):
 
         self.assertEqual(snapshot(first),snapshot(second))
 
+    def test_deterministic_ids_include_candidate_notes(self):
+        def score(candidate):
+            return 1.0
+
+        config=EvolutionConfig(
+            generations=1,
+            population_size=2,
+            survivors=1,
+            seed=3,
+            deterministic_ids=True,
+        )
+        result=evolve(
+            [
+                Candidate(text="same text",notes={"source":"a"}),
+                Candidate(text="same text",notes={"source":"b"}),
+            ],
+            evaluator=score,
+            config=config,
+        )
+
+        ids=[candidate.id for candidate in result.final_population]
+        self.assertEqual(len(ids),len(set(ids)))
+        self.assertTrue(all(len(candidate_id)==20 for candidate_id in ids))
+
     def test_deterministic_ids_change_with_run_seed(self):
         def score(candidate):
             return 1.0
