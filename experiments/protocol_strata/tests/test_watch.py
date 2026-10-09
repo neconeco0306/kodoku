@@ -26,6 +26,7 @@ class ObserverTests(unittest.TestCase):
         result = watch.collect(self.root, fake(A), "2026-10-10T01:00:00Z")
         self.assertEqual(result["baseline"], 3)
         self.assertEqual(self.rows("changes.jsonl"), [])
+        self.assertIn("| mcp | 2026-10-10T01:00:00Z | OK |", (self.root / "STATUS.md").read_text())
     def test_same_day_dedup_and_transition(self):
         watch.collect(self.root, fake(A), "2026-10-10T01:00:00Z")
         watch.collect(self.root, fake(A), "2026-10-10T02:00:00Z")
@@ -46,6 +47,7 @@ class ObserverTests(unittest.TestCase):
         state = json.loads((self.root / "data" / "state.json").read_text())
         self.assertTrue(all(x["sha"] == A for x in state["sources"].values()))
         self.assertNotIn("secret-value", (self.root / "data" / "observations.jsonl").read_text())
+        self.assertIn("ERROR: OSError", (self.root / "STATUS.md").read_text())
     def test_partial_failure_then_recovery(self):
         watch.collect(self.root, fake(A), "2026-10-10T01:00:00Z")
         def fail_one(repo, path):
