@@ -1,0 +1,19 @@
+name: Validate PROTOCOL STRATA
+on:
+  pull_request:
+    paths:
+      - 'experiments/protocol_strata/**'
+      - '.github/workflows/protocol-strata-tests.yml'
+permissions:
+  contents: read
+jobs:
+  observer-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run deterministic observer tests
+        run: python -m unittest discover -s experiments/protocol_strata/tests -v
