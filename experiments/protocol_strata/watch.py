@@ -90,6 +90,14 @@ def collect(root=HERE, fetcher=fetch_commit, at=None):
     for sid, repo, path in SOURCES:
         s = state["sources"].get(sid)
         report.append(f"| {sid} | [{s['sha'][:12]}]({s['source_url']}) | {s['source_date']} | {s['transitions']} |" if s else f"| {sid} | NOT_OBSERVED | — | — |")
+    report += ["", "## Collection health", "", "| Source | Latest check (UTC) | Outcome |", "|---|---|---|"]
+    for sid, _, _ in SOURCES:
+        latest = next((row for row in reversed(readings) if row["source"] == sid), None)
+        if latest is None:
+            report.append(f"| {sid} | never | NOT_OBSERVED |")
+        else:
+            outcome = "OK" if latest["status"] == "ok" else "ERROR: " + latest.get("error_type", "unknown")
+            report.append(f"| {sid} | {latest['observed_at']} | {outcome} |")
     report += ["", "Last attempted observation (UTC): " + at, "",
                "Only the latest GitHub commit touching the watched path is checked each day.",
                "Intermediate changes can be missed. Upstream rename, API downtime, and history rewrites need investigation.", ""]
