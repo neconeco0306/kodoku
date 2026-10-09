@@ -1,0 +1,44 @@
+name: Record AI protocol revisions
+
+on:
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: protocol-strata-ledger
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check ledger behavior
+        run: python -m unittest discover -s experiments/protocol_strata/tests -v
+      - name: Sample official source commits
+        id: sample
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python experiments/protocol_strata/watch.py
+      - name: Commit observations including failed checks
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add experiments/protocol_strata/data experiments/protocol_strata/STATUS.md
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore: append public specification observations'
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Surface fetch failure
+        if: steps.sample.outcome != 'success'
+        run: exit 1
