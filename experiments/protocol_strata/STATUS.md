@@ -9,7 +9,15 @@ Observation timestamps are not upstream commit dates. Fetch failures are not pro
 | a2a | [cfc9d34bc41e](https://github.com/a2aproject/A2A/commit/cfc9d34bc41e368827eb6446d31f912e44f795c5) | 2026-07-21T16:48:19Z | 0 |
 | agent-skills | [217be548739f](https://github.com/agentskills/agentskills/commit/217be548739f21d6008915c29aefe320ea1a90af) | 2026-08-04T22:52:17Z | 0 |
 
-Last attempted observation (UTC): 2026-10-09T19:35:24Z
+## Collection health
+
+| Source | Latest check (UTC) | Outcome |
+|---|---|---|
+| mcp | 2026-10-10T09:47:38Z | OK |
+| a2a | 2026-10-10T09:47:38Z | OK |
+| agent-skills | 2026-10-10T09:47:38Z | OK |
+
+Last attempted observation (UTC): 2026-10-10T09:47:38Z
 
 Only the latest GitHub commit touching the watched path is checked each day.
 Intermediate changes can be missed. Upstream rename, API downtime, and history rewrites need investigation.
