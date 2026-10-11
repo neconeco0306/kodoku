@@ -1,13 +1,15 @@
 import unittest
 from datetime import date, timedelta
-from experiments.protocol_strata.protocol_health import assess
+from experiments.protocol_strata.protocol_health import SOURCE_PATHS, assess
 
 SOURCE_IDS = ("mcp", "a2a", "agent-skills")
 START = date(2026, 10, 9)
 
 
 def at(day, source, status="ok"):
-    record = {"source": source, "status": status, "observed_at": day.isoformat() + "T03:17:00Z"}
+    repo, path = SOURCE_PATHS[source]
+    record = {"source": source, "repository": repo, "path": path,
+              "status": status, "observed_at": day.isoformat() + "T03:17:00Z"}
     if status == "ok":
         record["sha"] = "a" * 40
     return record
@@ -42,13 +44,17 @@ class ProtocolHealthTests(unittest.TestCase):
         self.assertEqual(assess(rows, as_of=START)["complete_days"], 1)
 
     def test_rejects_wrong_clock_source_status_and_missing_sha(self):
+        valid = at(START, "mcp")
         invalid = [
-            {"source": "mcp", "status": "ok", "observed_at": "2026-10-09T03:00:00+09:00", "sha": "a"*40},
-            {"source": "typo", "status": "ok", "observed_at": "2026-10-09T03:00:00Z", "sha": "a"*40},
-            {"source": "mcp", "status": "ok", "observed_at": "2026-10-09T03:00:00Z"},
-            {"source": "mcp", "status": "claim", "observed_at": "2026-10-09T03:00:00Z"},
-            {"source": "mcp", "status": "ok", "observed_at": "2026-10-09Z", "sha": "a"*40},
-            {"source": "mcp", "status": "ok", "observed_at": "2026-10-09T03:00:00Z", "sha": "not-a-commit"},
+            {**valid, "observed_at": "2026-10-09T03:00:00+09:00"},
+            {**valid, "source": "typo"},
+            {**valid, "sha": None},
+            {**valid, "status": "claim"},
+            {**valid, "observed_at": "2026-10-09Z"},
+            {**valid, "sha": "not-a-commit"},
+            {**valid, "repository": "unrelated/other-repo"},
+            {**valid, "path": "README.md"},
+            {**valid, "path": None},
         ]
         for item in invalid:
             with self.subTest(item=item), self.assertRaises(ValueError):
