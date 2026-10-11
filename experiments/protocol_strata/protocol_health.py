@@ -11,7 +11,15 @@ from datetime import date, datetime, timedelta, timezone
 import json
 from pathlib import Path
 
-SOURCES = frozenset({"mcp", "a2a", "agent-skills"})
+# A familiar label is not enough: it must point to the intended official
+# repository and watched specification path. Update this contract explicitly
+# if a source moves; never silently count an unrelated path as coverage.
+SOURCE_PATHS = {
+    "mcp": ("modelcontextprotocol/modelcontextprotocol", "schema"),
+    "a2a": ("a2aproject/A2A", "specification"),
+    "agent-skills": ("agentskills/agentskills", "docs/specification.mdx"),
+}
+SOURCES = frozenset(SOURCE_PATHS)
 WINDOW_DAYS = 30
 REQUIRED_GOOD_DAYS = 25
 
@@ -42,6 +50,8 @@ def assess(rows: list[dict], *, as_of: date) -> dict:
         status = row.get("status")
         if source not in SOURCES or status not in {"ok", "error"}:
             raise ValueError("unknown source/status in observation")
+        if (row.get("repository"), row.get("path")) != SOURCE_PATHS[source]:
+            raise ValueError("unexpected official repository/path in observation")
         day = _utc_date(row.get("observed_at"))
         if status == "ok":
             sha = row.get("sha")
