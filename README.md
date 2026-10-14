@@ -72,7 +72,7 @@ for item in result.hall_of_fame[:5]:
 
 - **Evidence over vibes** — a single high score is only one observation.
 - **Diversity over averaging** — preserve distinct lineages when possible.
-- **Reproducibility** — seeded runs should be replayable.
+- **Reproducibility** — seeded runs should be replayable. Set `deterministic_ids=True` when lineage IDs must also be stable across replays.
 - **Inspectable state** — generation history and ancestry stay visible.
 - **Replaceable modules** — generation, evaluation, mutation, and selection are swappable.
 - **Safe public surface** — secrets and private state do not belong in the repository.
