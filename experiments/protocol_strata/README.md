@@ -13,6 +13,17 @@ Run from the KODOKU repository root:
 
 The standalone GitHub Actions workflow runs at 03:17 UTC daily (12:17 JST), and can be manually dispatched. It needs no new domain, hardware, user API key, or paid platform.
 
+Read-only availability assessment (does not fetch sources or mutate the ledger):
+
+    python3 experiments/protocol_strata/protocol_health.py
+
+The fixed 30-UTC-day window starts with the earliest recorded sample (not the date
+the command is invoked). Each day counts only if all three source observations
+succeeded; missing days and recorded errors are separately visible. A successful
+retry on the same UTC day may repair that day's availability. Before day 30 the
+status is always INCOMPLETE. The 25/30 result is **collector reliability only**:
+it never certifies meaningful source changes, independent user demand or revenue.
+
 Records:
 - data/observations.jsonl: UTC-dated samples, including errors.
 - data/changes.jsonl: first observed transitions between commit fingerprints (not the initial baseline).
