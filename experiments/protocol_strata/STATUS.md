@@ -13,11 +13,11 @@ Observation timestamps are not upstream commit dates. Fetch failures are not pro
 
 | Source | Latest check (UTC) | Outcome |
 |---|---|---|
-| mcp | 2026-10-24T08:05:01Z | OK |
-| a2a | 2026-10-24T08:05:01Z | OK |
-| agent-skills | 2026-10-24T08:05:01Z | OK |
+| mcp | 2026-10-25T08:22:24Z | OK |
+| a2a | 2026-10-25T08:22:24Z | OK |
+| agent-skills | 2026-10-25T08:22:24Z | OK |
 
-Last attempted observation (UTC): 2026-10-24T08:05:01Z
+Last attempted observation (UTC): 2026-10-25T08:22:24Z
 
 Only the latest GitHub commit touching the watched path is checked each day.
 Intermediate changes can be missed. Upstream rename, API downtime, and history rewrites need investigation.
