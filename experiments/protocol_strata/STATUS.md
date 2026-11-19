@@ -5,7 +5,7 @@ Observation timestamps are not upstream commit dates. Fetch failures are not pro
 
 | Protocol | Last source revision | Source commit date (UTC) | Observed transitions |
 |---|---|---|---:|
-| mcp | [ac00313ff7f5](https://github.com/modelcontextprotocol/modelcontextprotocol/commit/ac00313ff7f5e9f47b0e0d1ebdf9c0ad6411380b) | 2026-11-16T04:15:09Z | 2 |
+| mcp | [51735935c3b6](https://github.com/modelcontextprotocol/modelcontextprotocol/commit/51735935c3b64787340bfbd23ec3e7292711f7fc) | 2026-11-18T18:56:30Z | 3 |
 | a2a | [cfc9d34bc41e](https://github.com/a2aproject/A2A/commit/cfc9d34bc41e368827eb6446d31f912e44f795c5) | 2026-07-21T16:48:19Z | 0 |
 | agent-skills | [217be548739f](https://github.com/agentskills/agentskills/commit/217be548739f21d6008915c29aefe320ea1a90af) | 2026-08-04T22:52:17Z | 0 |
 
@@ -13,11 +13,11 @@ Observation timestamps are not upstream commit dates. Fetch failures are not pro
 
 | Source | Latest check (UTC) | Outcome |
 |---|---|---|
-| mcp | 2026-11-18T11:36:29Z | OK |
-| a2a | 2026-11-18T11:36:29Z | OK |
-| agent-skills | 2026-11-18T11:36:29Z | OK |
+| mcp | 2026-11-19T11:34:48Z | OK |
+| a2a | 2026-11-19T11:34:48Z | OK |
+| agent-skills | 2026-11-19T11:34:48Z | OK |
 
-Last attempted observation (UTC): 2026-11-18T11:36:29Z
+Last attempted observation (UTC): 2026-11-19T11:34:48Z
 
 Only the latest GitHub commit touching the watched path is checked each day.
 Intermediate changes can be missed. Upstream rename, API downtime, and history rewrites need investigation.
